@@ -173,9 +173,11 @@ img, svg { max-width: 100%; }
   padding: .25rem .75rem .25rem .35rem; font-weight: 700; color: var(--ink);
 }
 .meal-seq.no-seq { padding-left: .75rem; }
+.meal-seq { max-width: 100%; }
 .meal-seq .seq { display: inline-flex; align-items: center; gap: .1rem; }
-.meal-seq svg { width: 30px; height: 30px; }
-.meal-seq .arrow { width: 18px; height: 18px; color: var(--ink-2); }
+.meal-seq svg { width: 30px; height: 30px; flex: none; }
+.meal-seq .seq { flex: none; }
+.meal-seq .arrow { width: 18px !important; height: 18px !important; color: var(--ink-2); }
 
 /* Carte de prise (aperçu des composants) */
 .dose {
@@ -188,8 +190,11 @@ img, svg { max-width: 100%; }
 .dose-name { margin: 0 0 .4rem; color: var(--ink-2); }
 .dose-name strong { color: var(--ink); }
 @media (max-width: 560px) {
-  .dose { grid-template-columns: 1fr; }
+  .dose { grid-template-columns: auto 1fr; gap: .75rem; }
+  .dose > .take, .dose > .prn-actions { grid-column: 1 / -1; }
   .take { width: 100%; }
+  .dose-visual { width: 72px; }
+  .dose-visual .pill { width: 33px; height: 33px; }
 }
 
 .moment-head { display: flex; align-items: center; gap: .9rem; margin-bottom: 1rem; }
@@ -230,3 +235,156 @@ img, svg { max-width: 100%; }
 .tag-do { color: var(--success); font-weight: 700; }
 .tag-dont { color: var(--danger); font-weight: 700; }
 .sg footer { text-align: center; color: var(--ink-2); padding: 2rem 1rem; border-top: 1px solid var(--line); }
+
+/* =========================================================
+   Vue patient
+   ========================================================= */
+.patient main { max-width: 680px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
+.patient main:focus { outline: none; }
+.hide-sm { }
+@media (max-width: 480px) { .hide-sm { display: none; } }
+
+.icon-btn {
+  width: var(--tap); height: var(--tap); flex: none; display: inline-grid; place-items: center;
+  border-radius: 50%; border: 2px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer;
+}
+.icon-btn svg { width: 22px; height: 22px; }
+.icon-btn:hover { background: var(--surface-2); }
+.btn svg { width: 1.3em; height: 1.3em; flex: none; }
+
+.demo-banner {
+  display: flex; flex-wrap: wrap; gap: .25rem .75rem; align-items: center; justify-content: space-between;
+  background: var(--primary-soft); color: var(--primary); border-radius: var(--radius-sm);
+  padding: .6rem 1rem; font-weight: 700; margin-bottom: 1.25rem;
+}
+
+/* Bonjour */
+.hello { margin-bottom: 1.25rem; }
+.hello-date { color: var(--ink-2); margin: 0 0 .25rem; }
+.hello-date::first-letter { text-transform: uppercase; }
+.hello h1 { margin-bottom: .25rem; }
+.hello-from { color: var(--ink-2); margin-bottom: 1rem; }
+.day-progress { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; font-weight: 700; }
+.day-label { white-space: nowrap; }
+.day-bar { flex: 1; height: 12px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--line); }
+.day-bar span { display: block; height: 100%; background: var(--primary); border-radius: var(--radius-pill); }
+.hello-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
+.hello-actions .btn { flex: 1 1 240px; }
+
+/* Statut du moment */
+.status-stack { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
+.status {
+  display: flex; gap: 1rem; align-items: flex-start;
+  border-radius: var(--radius); padding: 1.1rem 1.25rem; border: 2px solid var(--line); background: var(--surface);
+}
+.status p { margin: 0 0 .5rem; }
+.status p:last-child { margin-bottom: 0; }
+.status-title { font-size: 1.25rem; font-weight: 700; margin: 0 0 .35rem; }
+.status-kicker { font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: .06em; font-size: .85rem; }
+.status-hint { display: block; font-size: 1rem; font-weight: 400; color: var(--ink-2); margin-top: .2rem; }
+.status-next { border-color: var(--primary); background: var(--primary-soft); }
+.status-next .btn { margin-top: .5rem; }
+.status-warn { border-color: #C98A0C; background: var(--warn-soft); color: var(--warn); }
+.status-warn .status-title { color: var(--ink); }
+.status-done { border-color: var(--success); background: var(--success-soft); }
+.status-done .status-title { color: var(--success); }
+.status-done::before {
+  content: ""; flex: none; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--success) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / 60% no-repeat;
+  animation: pop .4s ease-out;
+}
+@keyframes pop { 0% { transform: scale(.4); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
+
+/* Moments */
+.moment {
+  background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 1.1rem; margin-bottom: 1.25rem;
+  border-top: 8px solid var(--moment-color, var(--line));
+  scroll-margin-top: 1rem;
+}
+.moment-morning { --moment-color: var(--morning); }
+.moment-noon { --moment-color: var(--noon); }
+.moment-evening { --moment-color: var(--evening); }
+.moment-night { --moment-color: var(--night); }
+.moment-prn { --moment-color: var(--ink-2); }
+.moment.is-next { outline: 3px solid var(--primary); outline-offset: 2px; }
+.moment-head h2 { margin: 0; font-size: 1.5rem; }
+.now-badge {
+  display: inline-block; margin: 0 0 .25rem !important; padding: .1rem .6rem; border-radius: var(--radius-pill);
+  background: var(--primary); color: #fff !important; font-size: .85rem; font-weight: 700;
+}
+.prn-icon {
+  width: 64px; height: 64px; flex: none; display: grid; place-items: center; border-radius: 18px;
+  background: var(--surface-2); font-size: 2rem; font-weight: 700; color: var(--ink-2);
+}
+
+.doses { list-style: none; margin: 0; padding: 0; display: grid; gap: .75rem; }
+.dose { align-items: start; }
+.dose-visual { padding-top: .25rem; width: 88px; }
+.dose-visual .pill-row { gap: 4px; }
+.dose-visual .pill-row .pill-count { margin: .25rem 0 0; }
+.dose-body { min-width: 0; }
+.dose-meta { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; margin-bottom: .5rem; }
+.dose-note { margin: 0 0 .5rem; padding: .5rem .75rem; background: var(--warn-soft); border-radius: var(--radius-sm); font-weight: 700; }
+.dose > .take, .prn-actions { align-self: center; }
+.dose.is-taken .dose-qty, .dose.is-taken .dose-name { opacity: .75; }
+
+.chip {
+  display: inline-flex; align-items: center; padding: .3rem .75rem; border-radius: var(--radius-pill);
+  background: var(--surface-2); font-weight: 700; font-size: .95rem;
+}
+.chip-accent { background: var(--accent); color: #fff; }
+
+.info-btn {
+  display: inline-flex; align-items: center; gap: .4rem; min-height: 44px; padding: 0 .25rem;
+  background: none; border: 0; font: inherit; font-weight: 700; color: var(--primary);
+  text-decoration: underline; text-underline-offset: .2em; cursor: pointer; text-align: left;
+}
+.info-btn svg { width: 22px; height: 22px; flex: none; }
+
+/* Si besoin */
+.prn-actions { display: grid; gap: .5rem; }
+.prn-count { display: flex; align-items: center; gap: .6rem; font-weight: 700; margin: 0 0 .5rem; }
+.dots { display: inline-flex; gap: .3rem; }
+.dot { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--ink-2); }
+.dot.on { background: var(--ink); border-color: var(--ink); }
+.prn-limit { margin: 0 0 .5rem; padding: .5rem .75rem; border-radius: var(--radius-sm); background: var(--danger-soft); color: var(--danger); font-weight: 700; }
+
+.call-card {
+  display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; border-radius: var(--radius);
+  background: var(--surface); border: 2px solid var(--primary); color: var(--ink); text-decoration: none;
+}
+.call-card svg { width: 32px; height: 32px; color: var(--primary); flex: none; }
+
+.empty { text-align: center; color: var(--ink-2); padding: 3rem 1rem; }
+.empty svg { margin: 0 auto 1rem; }
+
+.patient-footer { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 2.5rem; color: var(--ink-2); font-size: .9rem; text-align: center; }
+
+/* Fiche médicament (boîte de dialogue) */
+.sheet {
+  width: min(640px, calc(100% - 1.5rem)); max-height: calc(100% - 1.5rem);
+  border: 0; border-radius: var(--radius); padding: 1.25rem; color: var(--ink); background: var(--bg);
+  box-shadow: 0 20px 60px rgba(27, 31, 59, .35);
+}
+.sheet::backdrop { background: rgba(27, 31, 59, .55); }
+.sheet-head { display: flex; align-items: flex-start; gap: .9rem; margin-bottom: 1rem; }
+.sheet-head > div { flex: 1; }
+.sheet-head h2 { margin: 0; font-size: 1.5rem; }
+.sheet-strength { font-weight: 400; color: var(--ink-2); font-size: 1.1rem; }
+.sheet-for { margin: .25rem 0 0; font-weight: 700; color: var(--primary); }
+.fiche { display: grid; gap: .75rem; margin-top: 1rem; }
+.fiche-block { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-sm); padding: .9rem 1rem; }
+.fiche-block h3 { display: flex; align-items: center; gap: .5rem; font-size: 1.1rem; margin: 0 0 .4rem; }
+.fiche-icon { font-size: 1.4rem; }
+.fiche-block ul { margin: 0; padding-left: 1.25rem; }
+.fiche-block li + li { margin-top: .3rem; }
+.fiche-alert { background: var(--danger-soft); border-color: #E7B4B0; }
+.fiche-alert h3 { color: var(--danger); }
+.fiche-how { background: var(--success-soft); border-color: #B9DCC6; }
+.sheet-source { margin: 1rem 0 0; font-size: .9rem; color: var(--ink-2); }
+
+/* Aperçu intégré (vue pharmacien) */
+.embed .site-header, .embed .kente, .embed .patient-footer, .embed .skip-link { display: none; }
+.embed main { padding: 1rem .85rem 2rem; }
+.embed .hello h1 { font-size: 2rem; }

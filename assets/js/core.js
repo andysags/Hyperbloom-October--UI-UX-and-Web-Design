@@ -291,6 +291,66 @@
     logo: `<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect width="48" height="48" rx="14" fill="#2B3A8C"/><g transform="rotate(-35 24 24)"><path d="M24 15h-9a9 9 0 0 0 0 18h9z" fill="#F2B33D"/><path d="M24 15h9a9 9 0 0 1 0 18h-9z" fill="#fff"/></g></svg>`
   };
 
+  Dose.ICON.close = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
+  Dose.ICON.phone = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>`;
+  Dose.ICON.play = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>`;
+
+  /* ---------- Langues parlées par le patient ---------- */
+  Dose.LANGS = {
+    fr: 'Français', en: 'English', fon: 'Fɔngbè', yo: 'Yorùbá',
+    gen: 'Gɛn (mina)', ddn: 'Dendi', bba: 'Baatɔnum', adj: 'Ajagbe'
+  };
+
+  /* ---------- Ordonnance dans le lien : JSON → UTF-8 → base64url ---------- */
+  Dose.encode = function (obj) {
+    const bytes = new TextEncoder().encode(JSON.stringify(obj));
+    let bin = '';
+    bytes.forEach((b) => { bin += String.fromCharCode(b); });
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  };
+  Dose.decode = function (str) {
+    let s = str.replace(/-/g, '+').replace(/_/g, '/');
+    while (s.length % 4) s += '=';
+    const bin = atob(s);
+    return JSON.parse(new TextDecoder().decode(Uint8Array.from(bin, (c) => c.charCodeAt(0))));
+  };
+  Dose.newId = () => Math.random().toString(36).slice(2, 10);
+
+  /* ---------- Dates (en jours locaux, format AAAA-MM-JJ) ---------- */
+  const pad = (n) => String(n).padStart(2, '0');
+  Dose.isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  Dose.today = () => Dose.isoDate(new Date());
+  Dose.parseDate = (iso) => { const [y, m, d] = iso.split('-').map(Number); return new Date(y, m - 1, d); };
+  Dose.addDays = (iso, n) => { const d = Dose.parseDate(iso); d.setDate(d.getDate() + n); return Dose.isoDate(d); };
+  Dose.daysBetween = (a, b) => Math.round((Dose.parseDate(b) - Dose.parseDate(a)) / 86400000);
+  Dose.formatDate = (iso, opts) => Dose.parseDate(iso).toLocaleDateString(
+    lang === 'en' ? 'en-GB' : 'fr-FR', opts || { weekday: 'long', day: 'numeric', month: 'long' });
+
+  /* ---------- Voix (synthèse vocale du navigateur) ---------- */
+  Dose.canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
+  let speakingBtn = null;
+  Dose.stopSpeaking = function () {
+    if (Dose.canSpeak) window.speechSynthesis.cancel();
+    if (speakingBtn) speakingBtn.setAttribute('aria-pressed', 'false');
+    speakingBtn = null;
+  };
+  /* Lit le texte ; un second clic sur le même bouton arrête la lecture. */
+  Dose.speak = function (text, btn) {
+    if (!Dose.canSpeak) return;
+    const same = btn && btn === speakingBtn;
+    Dose.stopSpeaking();
+    if (same) return;
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = lang === 'en' ? 'en-GB' : 'fr-FR';
+    u.rate = 0.9;
+    u.onend = u.onerror = () => { if (speakingBtn === btn) Dose.stopSpeaking(); };
+    if (btn) { speakingBtn = btn; btn.setAttribute('aria-pressed', 'true'); }
+    window.speechSynthesis.speak(u);
+  };
+
+  /* « de Paracétamol » / « d'Amoxicilline » */
+  Dose.de = (name) => (lang === 'fr' ? (/^[aeiouyhéèêàâîôû]/i.test(name) ? "d'" : 'de ') : '');
+
   /* ---------- Préférences communes (langue, texte agrandi) ---------- */
   Dose.initChrome = function () {
     if (Dose.store.get('dose:bigtext', false)) document.documentElement.classList.add('big-text');

@@ -8,6 +8,7 @@ Projet pour le hackathon [HyperBloom October : UI/UX & Web Design](https://www.h
 
 - 📄 [Document de cadrage](docs/CADRAGE.md) : problème, utilisateurs, parcours, décisions, périmètre.
 - 🎨 [Guide de style](styleguide.html) : couleurs, typographie, dessins des médicaments, pictogrammes.
+- 💊 [Vue patient](patient.html) : sans lien, elle affiche une ordonnance d'exemple (paludisme). Ajouter `?h=19` à l'adresse simule 19 h, pratique pour la démo.
 
 ## Lancer en local
 

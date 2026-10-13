@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#FBF6EE">
+  <title>Dose · Mon traitement</title>
+  <meta name="description" content="Votre ordonnance expliquée : quoi prendre, quand, et combien.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dose.css">
+</head>
+<body class="patient">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Aller au contenu</a>
+  <div class="kente" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span></a>
+    <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
+      <div class="segmented" role="group" data-i18n-attr="aria-label:a11y.lang">
+        <button type="button" data-set-lang="fr" aria-pressed="true" lang="fr" aria-label="Français">FR</button>
+        <button type="button" data-set-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+      </div>
+      <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
+        <span aria-hidden="true">Aa</span> <span class="hide-sm" data-i18n="a11y.bigtext">Texte agrandi</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <div id="app"></div>
+  </main>
+
+  <footer class="patient-footer"><p data-i18n="disclaimer"></p></footer>
+
+  <dialog id="fiche" class="sheet" aria-labelledby="fiche-title"></dialog>
+  <div class="sr-only" aria-live="polite" id="live"></div>
+
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/patient.js"></script>
+</body>
+</html>
