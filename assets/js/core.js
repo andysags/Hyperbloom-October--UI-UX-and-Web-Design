@@ -60,7 +60,8 @@
 
       'take': "J'ai pris", 'taken': 'Pris',
       'listen': 'Écouter',
-      'info': 'À quoi sert ce médicament ?'
+      'info': 'À quoi sert ce médicament ?',
+      'p.for': 'Pour {what}'
     },
     en: {
       'a11y.skip': 'Skip to content',
@@ -94,7 +95,8 @@
 
       'take': 'I took it', 'taken': 'Taken',
       'listen': 'Listen',
-      'info': 'What is this medicine for?'
+      'info': 'What is this medicine for?',
+      'p.for': 'For {what}'
     }
   };
 
