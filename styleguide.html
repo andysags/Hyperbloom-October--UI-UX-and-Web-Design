@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dose · Guide de style</title>
+  <meta name="description" content="Couleurs, typographie, dessins des médicaments et pictogrammes de Dose.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dose.css">
+</head>
+<body class="sg">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Aller au contenu</a>
+  <div class="kente" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span></a>
+    <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
+      <div class="segmented" role="group" data-i18n-attr="aria-label:a11y.lang">
+        <button type="button" data-set-lang="fr" aria-pressed="true" lang="fr" aria-label="Français">FR</button>
+        <button type="button" data-set-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+      </div>
+      <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
+        <span aria-hidden="true">Aa</span> <span data-i18n="a11y.bigtext">Texte agrandi</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main">
+    <h1>Guide de style</h1>
+    <p class="lead">Les fondations visuelles de Dose. Chaque choix sert une personne qui lit peu ou mal, qui voit mal, ou qui utilise un petit téléphone en plein soleil.</p>
+
+    <section aria-labelledby="sg-colors">
+      <h2 id="sg-colors">Couleurs</h2>
+      <p class="section-intro">Un fond crème, moins éblouissant que le blanc pur, et un indigo profond pour l'action. Les couleurs des moments ne servent qu'au décor : elles ne portent jamais de texte et ne sont jamais la seule information. Les ratios de contraste sont calculés en direct.</p>
+      <div class="sg-grid" id="swatches"></div>
+    </section>
+
+    <section aria-labelledby="sg-type" class="type-specimen">
+      <h2 id="sg-type">Typographie</h2>
+      <p class="section-intro">Atkinson Hyperlegible, créée par le Braille Institute pour les personnes malvoyantes. Les lettres qui se ressemblent (I, l, 1 · 0, O · b, d) ont des formes bien distinctes. Taille de base : 17 px, 21 px en mode texte agrandi.</p>
+      <div class="card">
+        <p class="label">Titre 1 · 52 px gras</p>
+        <p style="font-size:3.25rem;font-weight:700;line-height:1.1;letter-spacing:-.02em">Bonjour Afi</p>
+        <p class="label">Titre 2 · 32 px gras</p>
+        <p style="font-size:2rem;font-weight:700;line-height:1.2">Soir · vers 19 h</p>
+        <p class="label">Quantité · 22 px gras</p>
+        <p style="font-size:1.375rem;font-weight:700">4 comprimés</p>
+        <p class="label">Texte · 17 px</p>
+        <p>Prenez-les avec un repas ou du lait. Continuez même si la fièvre disparaît.</p>
+        <p class="label">Caractères ambigus</p>
+        <p style="font-size:2rem;letter-spacing:.1em">Il1 O0 bd 5S 8B</p>
+      </div>
+    </section>
+
+    <section aria-labelledby="sg-moments">
+      <h2 id="sg-moments">Moments de la journée</h2>
+      <p class="section-intro">Quatre moments repérables sans lire l'heure. Le matin et le soir se distinguent par la couleur du soleil, mais aussi par la flèche (le soleil monte ou descend) et par le fond.</p>
+      <div class="sg-grid" id="moments"></div>
+    </section>
+
+    <section aria-labelledby="sg-pills">
+      <h2 id="sg-pills">Dessins des médicaments</h2>
+      <p class="section-intro">Le patient reconnaît le médicament qu'il a dans la main : même forme, même couleur. Un contour sombre garde le dessin visible même pour un comprimé blanc.</p>
+      <h3>Formes</h3>
+      <div class="sg-grid" id="forms"></div>
+      <h3 style="margin-top:2rem">Couleurs</h3>
+      <div class="sg-grid" id="colors"></div>
+      <h3 style="margin-top:2rem">Quantité dessinée</h3>
+      <p class="section-intro">4 comprimés, ce sont 4 dessins : on compte sans savoir lire les chiffres. Au-delà de 4, un seul dessin suivi de « × n » évite une rangée illisible.</p>
+      <div class="sg-grid" id="quantities"></div>
+    </section>
+
+    <section aria-labelledby="sg-meals">
+      <h2 id="sg-meals">Repas</h2>
+      <p class="section-intro">L'ordre des images raconte la consigne : le médicament puis l'assiette, c'est « avant le repas ». Le texte reste toujours présent à côté.</p>
+      <div class="stack" id="meals"></div>
+    </section>
+
+    <section aria-labelledby="sg-buttons">
+      <h2 id="sg-buttons">Boutons</h2>
+      <p class="section-intro">Toutes les cibles font au moins 48 px. Le bouton « J'ai pris » fait 60 px de haut : c'est l'action la plus fréquente de l'application. Son état change de couleur, de texte et d'icône à la fois.</p>
+      <div class="row" id="buttons"></div>
+    </section>
+
+    <section aria-labelledby="sg-assembled">
+      <h2 id="sg-assembled">Assemblage : une prise</h2>
+      <p class="section-intro">Tous les éléments réunis, tels qu'ils apparaîtront dans la vue patient. Les boutons fonctionnent.</p>
+      <div class="card" id="assembled"></div>
+    </section>
+
+    <section aria-labelledby="sg-rules">
+      <h2 id="sg-rules">Règles</h2>
+      <div class="do-dont">
+        <div class="tile"><span class="tag-do">✓ À faire</span><p>Toujours doubler la couleur par une forme, un dessin et un texte.</p></div>
+        <div class="tile"><span class="tag-dont">✕ À éviter</span><p>« Prenez le comprimé rouge » sans dessin : les daltoniens et les écrans abîmés perdent l'information.</p></div>
+        <div class="tile"><span class="tag-do">✓ À faire</span><p>Un moment, une consigne, une action. L'écran du jour ne montre que ce qui est utile aujourd'hui.</p></div>
+        <div class="tile"><span class="tag-dont">✕ À éviter</span><p>Les abréviations médicales (« cp », « x3/j », « pdt ») et le jargon.</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer><p data-i18n="disclaimer"></p></footer>
+
+  <script src="assets/js/core.js"></script>
+  <script>
+  (function () {
+    const D = window.Dose, t = D.t, esc = D.esc;
+
+    /* Contraste WCAG */
+    const lum = (hex) => {
+      const n = parseInt(hex.slice(1), 16);
+      return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
+        .map((v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); })
+        .reduce((acc, v, i) => acc + v * [0.2126, 0.7152, 0.0722][i], 0);
+    };
+    const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
+
+    const SWATCHES = [
+      { name: 'Encre', token: '--ink', hex: '#1B1F3B', on: '#FBF6EE', role: 'Texte principal' },
+      { name: 'Encre 2', token: '--ink-2', hex: '#4A4F68', on: '#FBF6EE', role: 'Texte secondaire' },
+      { name: 'Indigo', token: '--primary', hex: '#2B3A8C', on: '#FFFFFF', role: 'Actions, liens' },
+      { name: 'Succès', token: '--success', hex: '#1D6B43', on: '#FFFFFF', role: 'Prise effectuée' },
+      { name: 'Terre cuite', token: '--accent', hex: '#B4441F', on: '#FFFFFF', role: 'Accent' },
+      { name: 'Alerte', token: '--danger', hex: '#A12622', on: '#FFFFFF', role: 'Signes d\'alerte' },
+      { name: 'Crème', token: '--bg', hex: '#FBF6EE', on: '#1B1F3B', role: 'Fond' },
+      { name: 'Soleil', token: '--morning', hex: '#F2B33D', on: '#1B1F3B', role: 'Décor : matin', deco: true },
+      { name: 'Couchant', token: '--evening', hex: '#E0703A', on: '#1B1F3B', role: 'Décor : soir', deco: true },
+      { name: 'Nuit', token: '--night', hex: '#2E3A7A', on: '#FFFFFF', role: 'Décor : nuit', deco: true }
+    ];
+
+    function render() {
+      document.getElementById('swatches').innerHTML = SWATCHES.map((s) => {
+        const r = ratio(s.hex, s.on);
+        const badge = s.deco ? '<span class="badge-aa badge-deco">décor</span>'
+          : `<span class="badge-aa">${r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : 'AA grand'}</span>`;
+        return `<div class="swatch">
+          <div class="swatch-color" style="background:${s.hex};color:${s.on}">${r.toFixed(1)}:1</div>
+          <div class="swatch-meta"><strong>${s.name}</strong> ${badge}<br><code>${s.token} ${s.hex}</code><br>${s.role}</div>
+        </div>`;
+      }).join('');
+
+      document.getElementById('moments').innerHTML = D.MOMENTS.map((m) => `
+        <div class="tile">${D.momentSVG(m.id, 88)}<strong>${esc(t('moment.' + m.id))}</strong><small>${esc(t('moment.' + m.id + '.hint'))}</small></div>`).join('');
+
+      const formColor = { round: ['white'], oval: ['orange'], capsule: ['red', 'yellow'], syrup: ['pink'], drops: ['blue'], sachet: ['green'] };
+      document.getElementById('forms').innerHTML = D.FORMS.map((f) => `
+        <div class="tile">${D.pillSVG(f, formColor[f][0], formColor[f][1], 72)}<strong>${esc(t('form.' + f))}</strong><small>1 ${esc(D.unit(f, 1))}</small></div>`).join('');
+
+      document.getElementById('colors').innerHTML = Object.keys(D.COLORS).map((c) => `
+        <div class="tile">${D.pillSVG('round', c, null, 56)}<strong>${esc(t('color.' + c))}</strong></div>`).join('');
+
+      document.getElementById('quantities').innerHTML = [
+        { q: 1, f: 'round', c: 'white' }, { q: 2, f: 'round', c: 'white' },
+        { q: 4, f: 'round', c: 'yellow' }, { q: 6, f: 'capsule', c: 'red', c2: 'yellow' }
+      ].map((m) => `<div class="tile">${D.pillsHTML(m, 36)}<strong>${m.q} ${esc(D.unit(m.f, m.q))}</strong></div>`).join('');
+
+      const sample = { f: 'round', c: 'yellow' };
+      document.getElementById('meals').innerHTML = D.MEALS.map((m) => `<div>${D.mealHTML(m, sample)}</div>`).join('');
+
+      document.getElementById('buttons').innerHTML = `
+        <button type="button" class="btn btn-primary">Créer l'ordonnance</button>
+        <button type="button" class="btn btn-secondary">Voir l'exemple</button>
+        <button type="button" class="btn btn-ghost">Annuler</button>
+        <button type="button" class="take" aria-pressed="false">${D.ICON.check}<span>${esc(t('take'))}</span></button>
+        <button type="button" class="take" aria-pressed="true">${D.ICON.check}<span>${esc(t('taken'))}</span></button>
+        <button type="button" class="listen" aria-label="${esc(t('listen'))}">${D.ICON.speaker}</button>`;
+
+      const doses = [
+        { n: 'Artéméther-Luméfantrine', s: '20/120 mg', f: 'round', c: 'yellow', q: 4, r: 'after' },
+        { n: 'Fer + acide folique', s: '', f: 'round', c: 'red', q: 1, r: 'before' }
+      ];
+      document.getElementById('assembled').innerHTML = `
+        <div class="moment-head">${D.momentSVG('morning', 64)}
+          <div><h3>${esc(t('moment.morning'))}</h3><p>${esc(t('moment.morning.hint'))}</p></div>
+          <button type="button" class="listen" aria-label="${esc(t('listen'))}">${D.ICON.speaker}</button>
+        </div>
+        <div class="stack">${doses.map((m) => `
+          <div class="dose">
+            <div>${D.pillsHTML(m, 40)}</div>
+            <div>
+              <p class="dose-qty">${m.q} ${esc(D.unit(m.f, m.q))}</p>
+              <p class="dose-name"><strong>${esc(m.n)}</strong> ${esc(m.s)}</p>
+              ${D.mealHTML(m.r, m)}
+            </div>
+            <button type="button" class="take" aria-pressed="false">${D.ICON.check}<span>${esc(t('take'))}</span><span class="sr-only">: ${esc(m.n)}</span></button>
+          </div>`).join('')}
+        </div>`;
+    }
+
+    document.addEventListener('click', (e) => {
+      const b = e.target.closest('#assembled .take, #buttons .take');
+      if (!b) return;
+      const on = b.getAttribute('aria-pressed') !== 'true';
+      b.setAttribute('aria-pressed', String(on));
+      b.querySelector('span').textContent = t(on ? 'taken' : 'take');
+      const card = b.closest('.dose');
+      if (card) card.classList.toggle('is-taken', on);
+    });
+
+    document.addEventListener('dose:lang', render);
+    D.initChrome();
+    render();
+  })();
+  </script>
+</body>
+</html>
