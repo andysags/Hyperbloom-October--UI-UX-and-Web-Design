@@ -157,7 +157,7 @@
       'ph.errNameField': 'Indica il nome del farmaco.',
       'ph.errWhenField': 'Scegli almeno un momento, oppure «Solo al bisogno».',
       'ph.errPatientField': 'Indica il nome del paziente.',
-      'ph.readyTitle': 'Ricetta pronta', 'ph.readyIn': 'Preparata in {s} secondi.',
+      'ph.readyTitle': 'Ricetta pronta', 'ph.readyIn': 'Preparata in {time}.',
       'ph.scan': 'Il paziente inquadra questo codice con la fotocamera del telefono.',
       'ph.qrUnavailable': 'Codice QR non disponibile offline. Usa il link.',
       'ph.link': 'Link della ricetta', 'ph.copy': 'Copia il link', 'ph.copied': 'Link copiato.',

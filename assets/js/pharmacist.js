@@ -47,7 +47,7 @@
       'ph.errName': 'Le nom du médicament {n}', 'ph.errWhen': 'Quand prendre le médicament {n}',
       'ph.errNameField': 'Indiquez le nom du médicament.', 'ph.errWhenField': 'Choisissez au moins un moment, ou « Seulement si besoin ».',
       'ph.errPatientField': 'Indiquez le prénom du patient.',
-      'ph.readyTitle': 'Ordonnance prête', 'ph.readyIn': 'Préparée en {s} secondes.',
+      'ph.readyTitle': 'Ordonnance prête', 'ph.readyIn': 'Préparée en {time}.',
       'ph.scan': 'Le patient scanne ce code avec l’appareil photo de son téléphone.',
       'ph.qrUnavailable': 'QR code indisponible hors connexion. Utilisez le lien.',
       'ph.link': 'Lien de l’ordonnance', 'ph.copy': 'Copier le lien', 'ph.copied': 'Lien copié.',
@@ -102,7 +102,7 @@
       'ph.errName': 'The name of medicine {n}', 'ph.errWhen': 'When to take medicine {n}',
       'ph.errNameField': 'Enter the medicine name.', 'ph.errWhenField': 'Choose at least one time, or “Only if needed”.',
       'ph.errPatientField': 'Enter the patient’s first name.',
-      'ph.readyTitle': 'Prescription ready', 'ph.readyIn': 'Prepared in {s} seconds.',
+      'ph.readyTitle': 'Prescription ready', 'ph.readyIn': 'Prepared in {time}.',
       'ph.scan': 'The patient scans this code with their phone camera.',
       'ph.qrUnavailable': 'QR code unavailable offline. Use the link.',
       'ph.link': 'Prescription link', 'ph.copy': 'Copy link', 'ph.copied': 'Link copied.',
@@ -130,6 +130,7 @@
   let meds = [];
   let uid = 0;
   let startedAt = null;
+  let usedExample = false; /* le chronomètre n'a de sens que pour une vraie saisie */
   let generated = false;
 
   const pharmacy = D.store.get('dose:pharmacy', { n: '', t: '' });
@@ -600,7 +601,8 @@
 
   function renderResult(rx) {
     const url = patientUrl(rx);
-    const secs = startedAt ? Math.max(1, Math.round((Date.now() - startedAt) / 1000)) : null;
+    const secs = startedAt && !usedExample ? Math.max(1, Math.round((Date.now() - startedAt) / 1000)) : null;
+    const time = secs === null ? '' : secs < 60 ? `${secs} s` : `${Math.floor(secs / 60)} min ${String(secs % 60).padStart(2, '0')} s`;
     const share = t('ph.shareText', { name: rx.p.n, ph: rx.ph.n || 'Dose', url });
     const qr = qrSVG(url);
     resultEl.innerHTML = `
@@ -608,7 +610,7 @@
         <span class="result-check" aria-hidden="true">${D.ICON.check}</span>
         <div>
           <h2 id="result-title">${esc(t('ph.readyTitle'))}</h2>
-          ${secs ? `<p class="result-time">${esc(t('ph.readyIn', { s: secs }))}</p>` : ''}
+          ${secs ? `<p class="result-time">${esc(t('ph.readyIn', { time }))}</p>` : ''}
         </div>
       </div>
       <p class="stale-note" hidden>${esc(t('ph.stale'))}</p>
@@ -668,6 +670,7 @@
     rxId = D.newId();
     meds = [];
     startedAt = null;
+    usedExample = false;
     generated = false;
     $('#p-name').value = '';
     $('#p-lang').value = 'fr';
@@ -682,6 +685,7 @@
     const demo = D.demo();
     rxId = D.newId();
     startedAt = startedAt || Date.now();
+    usedExample = true;
     $('#p-name').value = demo.p.n;
     $('#p-lang').value = demo.p.l;
     if (!$('#ph-name').value) $('#ph-name').value = demo.ph.n;

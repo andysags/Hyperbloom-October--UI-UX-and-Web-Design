@@ -371,6 +371,9 @@
   /* ---------- Préférences communes (langue, texte agrandi) ---------- */
   Dose.initChrome = function () {
     if (Dose.store.get('dose:bigtext', false)) document.documentElement.classList.add('big-text');
+    /* ?lang=es dans l'adresse : affiche la page dans cette langue sans changer la préférence enregistrée */
+    const forced = new URLSearchParams(location.search).get('lang');
+    if (forced && Dose.UI_LANGS[forced] && STR[forced]) lang = forced;
     if (!Dose.UI_LANGS[lang] || !STR[lang]) lang = 'fr';
     document.querySelectorAll('[data-lang-select]').forEach((sel) => {
       sel.innerHTML = Object.entries(Dose.UI_LANGS)

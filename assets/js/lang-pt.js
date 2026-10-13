@@ -157,7 +157,7 @@
       'ph.errNameField': 'Indique o nome do medicamento.',
       'ph.errWhenField': 'Escolha pelo menos um momento, ou «Só se for preciso».',
       'ph.errPatientField': 'Indique o nome do doente.',
-      'ph.readyTitle': 'Receita pronta', 'ph.readyIn': 'Preparada em {s} segundos.',
+      'ph.readyTitle': 'Receita pronta', 'ph.readyIn': 'Preparada em {time}.',
       'ph.scan': 'O doente digitaliza este código com a câmara do telemóvel.',
       'ph.qrUnavailable': 'Código QR indisponível sem ligação à internet. Use a ligação.',
       'ph.link': 'Ligação da receita', 'ph.copy': 'Copiar a ligação', 'ph.copied': 'Ligação copiada.',
