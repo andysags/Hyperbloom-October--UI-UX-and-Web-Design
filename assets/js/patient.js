@@ -435,7 +435,7 @@
         <p class="ps-howto"><span class="box"></span> ${esc(t('print.howto'))} <span class="ps-na-key"></span> ${esc(t('print.na'))}</p>
         <table class="ps-table"><thead>${head}</thead><tbody>${rows}</tbody></table>
         ${totalDays > n ? `<p class="ps-more">${esc(t('print.more', { n }))}</p>` : ''}
-        ${rx.m.filter((m) => m.note && !m.prn).map((m) => `<p class="ps-advice"><strong>${esc(m.n)} :</strong> ${esc(m.note)}</p>`).join('')}
+        ${rx.m.filter((m) => m.note && !m.prn).map((m) => `<p class="ps-advice"><strong>${esc(m.n)}${D.lang() === 'fr' ? ' :' : ':'}</strong> ${esc(m.note)}</p>`).join('')}
         <p class="ps-foot">${tel ? esc(t('print.call', { tel })) + ' · ' : ''}${esc(t('disclaimer'))}</p>
       </section>
       ${fiches.length ? `

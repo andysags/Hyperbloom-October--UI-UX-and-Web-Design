@@ -9,6 +9,7 @@ Projet pour le hackathon [HyperBloom October : UI/UX & Web Design](https://www.h
 🌐 **Démo en ligne :** https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/ (après activation de GitHub Pages)
 
 - 📄 [Document de cadrage](docs/CADRAGE.md) : problème, utilisateurs, parcours, décisions, périmètre.
+- 📘 [Case study (EN)](docs/CASE_STUDY.md) · ✍️ [Texte Devpost (EN)](docs/DEVPOST.md) · 🎬 [Script vidéo](docs/VIDEO_SCRIPT.md) · 🖼️ [Galerie](docs/gallery/)
 - 🎨 [Guide de style](styleguide.html) : couleurs, typographie, dessins des médicaments, pictogrammes.
 - 🏠 [Accueil](index.html) : le problème, l'avant/après, le fonctionnement et les principes.
 - 🧑‍⚕️ [Vue pharmacien](pharmacien.html) : création de l'ordonnance, aperçu en direct, message vocal, QR code, WhatsApp et SMS.
