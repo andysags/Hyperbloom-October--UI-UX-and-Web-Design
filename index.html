@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dose · L'ordonnance que tout le monde peut lire</title>
+  <meta name="description" content="Dose transforme une ordonnance en calendrier visuel et parlé, pour les patients qui lisent peu ou pas le français.">
+  <meta property="og:title" content="Dose · L'ordonnance que tout le monde peut lire">
+  <meta property="og:description" content="Des images à la place des abréviations, la voix du pharmacien à la place du jargon.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Caveat:wght@500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dose.css">
+</head>
+<body class="landing">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Aller au contenu</a>
+  <div class="kente" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span></a>
+    <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
+      <div class="segmented" role="group" data-i18n-attr="aria-label:a11y.lang">
+        <button type="button" data-set-lang="fr" aria-pressed="true" lang="fr" aria-label="Français">FR</button>
+        <button type="button" data-set-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
+      </div>
+      <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
+        <span aria-hidden="true">Aa</span> <span class="hide-sm" data-i18n="a11y.bigtext">Texte agrandi</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-text">
+        <p class="eyebrow" data-i18n="l.eyebrow"></p>
+        <h1 data-i18n="l.title"></h1>
+        <p class="hero-lead" data-i18n="l.lead"></p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="pharmacien.html" data-i18n="l.ctaPharma"></a>
+          <a class="btn btn-secondary btn-lg" href="patient.html" data-i18n="l.ctaPatient"></a>
+        </div>
+      </div>
+
+      <div class="before-after">
+        <figure class="ba ba-before">
+          <figcaption><span class="ba-tag ba-tag-before" data-i18n="l.before"></span> <span data-i18n="l.beforeCap"></span></figcaption>
+          <div class="scrawl" role="img" data-i18n-attr="aria-label:l.scrawlAlt">
+            <p class="hand" aria-hidden="true">
+              <span>Art.-Lum. 20/120</span>
+              <span>4cp x2/j pdt repas x3j</span>
+              <span>Para 1g si T°&gt;38,5 · max 3/j</span>
+              <span>Fer 1cp/j av. repas x30j</span>
+              <span class="sig">Dr K.</span>
+            </p>
+          </div>
+        </figure>
+        <span class="ba-arrow" aria-hidden="true">→</span>
+        <figure class="ba ba-after">
+          <figcaption><span class="ba-tag ba-tag-after" data-i18n="l.after"></span> <span data-i18n="l.afterCap"></span></figcaption>
+          <div class="mini-phone" id="mini-card"></div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- Problème -->
+    <section class="band" aria-labelledby="problem-title">
+      <div class="band-inner">
+        <h2 id="problem-title" data-i18n="l.problemTitle"></h2>
+        <div class="cards3">
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">✍️</span>
+            <h3 data-i18n="l.p1t"></h3><p data-i18n="l.p1"></p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">🗣️</span>
+            <h3 data-i18n="l.p2t"></h3><p data-i18n="l.p2"></p>
+          </article>
+          <article class="feature">
+            <span class="feature-icon" aria-hidden="true">⚠️</span>
+            <h3 data-i18n="l.p3t"></h3><p data-i18n="l.p3"></p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Comment ça marche -->
+    <section class="band band-alt" aria-labelledby="how-title">
+      <div class="band-inner">
+        <h2 id="how-title" data-i18n="l.howTitle"></h2>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-badge" aria-hidden="true">1</span>
+            <div class="step-visual" id="step1" aria-hidden="true"></div>
+            <h3 data-i18n="l.s1t"></h3><p data-i18n="l.s1"></p>
+          </li>
+          <li class="step">
+            <span class="step-badge" aria-hidden="true">2</span>
+            <div class="step-visual step-channels" aria-hidden="true"><span>▣ QR</span><span>WhatsApp</span><span>SMS</span><span>🖨️</span></div>
+            <h3 data-i18n="l.s2t"></h3><p data-i18n="l.s2"></p>
+          </li>
+          <li class="step">
+            <span class="step-badge" aria-hidden="true">3</span>
+            <div class="step-visual" id="step3" aria-hidden="true"></div>
+            <h3 data-i18n="l.s3t"></h3><p data-i18n="l.s3"></p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Principes -->
+    <section class="band" aria-labelledby="principles-title">
+      <div class="band-inner">
+        <h2 id="principles-title" data-i18n="l.prTitle"></h2>
+        <div class="cards3">
+          <article class="feature"><span class="feature-icon" aria-hidden="true">👁️</span><h3 data-i18n="l.pr1t"></h3><p data-i18n="l.pr1"></p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">🎙️</span><h3 data-i18n="l.pr2t"></h3><p data-i18n="l.pr2"></p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">📄</span><h3 data-i18n="l.pr3t"></h3><p data-i18n="l.pr3"></p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">🔒</span><h3 data-i18n="l.pr4t"></h3><p data-i18n="l.pr4"></p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">🔤</span><h3 data-i18n="l.pr5t"></h3><p data-i18n="l.pr5"></p></article>
+          <article class="feature"><span class="feature-icon" aria-hidden="true">🎨</span><h3 data-i18n="l.pr6t"></h3><p data-i18n="l.pr6"></p></article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Appel final -->
+    <section class="band band-cta" aria-labelledby="cta-title">
+      <div class="band-inner cta-inner">
+        <h2 id="cta-title" data-i18n="l.ctaTitle"></h2>
+        <p data-i18n="l.ctaText"></p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="pharmacien.html" data-i18n="l.ctaPharma"></a>
+          <a class="btn btn-secondary btn-lg" href="patient.html" data-i18n="l.ctaPatient"></a>
+          <a class="btn btn-ghost btn-lg" href="styleguide.html" data-i18n="l.ctaStyle"></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="landing-footer">
+    <p data-i18n="l.footer"></p>
+    <p data-i18n="disclaimer"></p>
+  </footer>
+
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/landing.js"></script>
+</body>
+</html>

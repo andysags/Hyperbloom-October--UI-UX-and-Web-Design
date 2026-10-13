@@ -50,7 +50,7 @@
       'ph.scan': 'Le patient scanne ce code avec l’appareil photo de son téléphone.',
       'ph.qrUnavailable': 'QR code indisponible hors connexion. Utilisez le lien.',
       'ph.link': 'Lien de l’ordonnance', 'ph.copy': 'Copier le lien', 'ph.copied': 'Lien copié.',
-      'ph.whatsapp': 'Envoyer par WhatsApp', 'ph.sms': 'Envoyer par SMS', 'ph.open': 'Ouvrir la vue patient',
+      'ph.whatsapp': 'Envoyer par WhatsApp', 'ph.print': 'Imprimer la feuille papier', 'ph.sms': 'Envoyer par SMS', 'ph.open': 'Ouvrir la vue patient',
       'ph.shareText': 'Bonjour {name}, voici votre traitement expliqué par {ph} : {url}',
       'ph.new': 'Nouvelle ordonnance', 'ph.stale': 'L’ordonnance a changé. Créez-la à nouveau pour mettre à jour le lien.',
       'ph.preview': 'Aperçu patient', 'ph.previewFrame': 'Aperçu de l’écran du patient',
@@ -104,7 +104,7 @@
       'ph.scan': 'The patient scans this code with their phone camera.',
       'ph.qrUnavailable': 'QR code unavailable offline. Use the link.',
       'ph.link': 'Prescription link', 'ph.copy': 'Copy link', 'ph.copied': 'Link copied.',
-      'ph.whatsapp': 'Send via WhatsApp', 'ph.sms': 'Send via SMS', 'ph.open': 'Open patient view',
+      'ph.whatsapp': 'Send via WhatsApp', 'ph.print': 'Print the paper sheet', 'ph.sms': 'Send via SMS', 'ph.open': 'Open patient view',
       'ph.shareText': 'Hello {name}, here is your treatment explained by {ph}: {url}',
       'ph.new': 'New prescription', 'ph.stale': 'The prescription changed. Create it again to update the link.',
       'ph.preview': 'Patient preview', 'ph.previewFrame': 'Preview of the patient screen',
@@ -619,6 +619,7 @@
           <button type="button" class="btn btn-secondary" id="copy-link">${esc(t('ph.copy'))}</button>
           <a class="btn btn-whatsapp" href="https://wa.me/?text=${encodeURIComponent(share)}" target="_blank" rel="noopener">${esc(t('ph.whatsapp'))}</a>
           <a class="btn btn-secondary" href="sms:?&body=${encodeURIComponent(share)}">${esc(t('ph.sms'))}</a>
+          <a class="btn btn-secondary" href="${esc(url.replace('patient.html#', 'patient.html?print#'))}" target="_blank" rel="noopener">${esc(t('ph.print'))}</a>
           <a class="btn btn-ghost" href="${esc(url)}" target="_blank" rel="noopener">${esc(t('ph.open'))}</a>
           <button type="button" class="btn btn-ghost" id="new-rx">${esc(t('ph.new'))}</button>
         </div>

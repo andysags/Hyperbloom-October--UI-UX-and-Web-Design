@@ -42,6 +42,16 @@
       'p.marked': '{name} : prise notée. Bravo !', 'p.unmarked': '{name} : prise annulée.',
       'p.prnMarked': '{name} : {n} sur {max} aujourd’hui.',
       'p.for': 'Pour {what}',
+      'p.print': 'Imprimer ma feuille papier',
+      'print.title': 'Mon calendrier de médicaments',
+      'print.for': 'Pour', 'print.from': 'Pharmacie', 'print.start': 'Début',
+      'print.howto': 'Cochez une case chaque fois que vous prenez le médicament.',
+      'print.na': 'Case grise : plus de prise ce jour-là.',
+      'print.day': 'Jour {n}',
+      'print.more': 'Cette feuille couvre les {n} premiers jours. Demandez la suite à votre pharmacie.',
+      'print.prnHow': 'Une case par prise, {max} au plus par jour.',
+      'print.back': 'À quoi servent mes médicaments ?',
+      'print.call': 'Une question ? Appelez votre pharmacie : {tel}',
 
       'f.use': 'À quoi il sert', 'f.how': 'Bien le prendre', 'f.ok': 'Ce qui peut arriver, sans danger',
       'f.alert': 'Revenez à la pharmacie ou allez à l’hôpital si…', 'f.avoid': 'À éviter',
@@ -85,6 +95,16 @@
       'p.marked': '{name}: dose recorded. Well done!', 'p.unmarked': '{name}: dose cancelled.',
       'p.prnMarked': '{name}: {n} of {max} today.',
       'p.for': 'For {what}',
+      'p.print': 'Print my paper sheet',
+      'print.title': 'My medicine calendar',
+      'print.for': 'For', 'print.from': 'Pharmacy', 'print.start': 'Start',
+      'print.howto': 'Tick a box each time you take the medicine.',
+      'print.na': 'Grey box: no dose that day.',
+      'print.day': 'Day {n}',
+      'print.more': 'This sheet covers the first {n} days. Ask your pharmacy for the rest.',
+      'print.prnHow': 'One box per dose, at most {max} a day.',
+      'print.back': 'What are my medicines for?',
+      'print.call': 'A question? Call your pharmacy: {tel}',
 
       'f.use': 'What it is for', 'f.how': 'How to take it well', 'f.ok': 'What may happen, harmlessly',
       'f.alert': 'Go back to the pharmacy or to hospital if…', 'f.avoid': 'Avoid',
@@ -281,7 +301,12 @@
       html += `<a class="call-card" href="tel:${esc(rx.ph.t.replace(/[^\d+]/g, ''))}">${D.ICON.phone}<span><strong>${esc(t('p.call'))}</strong><br>${esc(rx.ph.n || '')} · ${esc(rx.ph.t)}</span></a>`;
     }
 
+    if (!EMBED) {
+      html += `<button type="button" class="btn btn-secondary btn-lg print-btn" data-action="print" data-key="print">${PRINTER}<span>${esc(t('p.print'))}</span></button>`;
+    }
+
     app.innerHTML = html;
+    renderPrint();
 
     if (focusKey) {
       const el = app.querySelector(`[data-key="${CSS.escape(focusKey)}"]`);
@@ -352,6 +377,79 @@
           ${n > 0 ? `<button type="button" class="btn btn-ghost" data-action="prn-undo" data-dose="${esc(key)}" data-med="${x.i}" data-key="prn-undo-${x.i}">${esc(t('p.prnUndo'))}<span class="sr-only">: ${esc(m.n)}</span></button>` : ''}
         </div>
       </li>`;
+  }
+
+  /* ---------- Feuille papier ---------- */
+  const PRINTER = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3h10v5H7zM5 9h14a2 2 0 0 1 2 2v6h-4v4H7v-4H3v-6a2 2 0 0 1 2-2zm4 8v2h6v-4H9z" fill="currentColor"/></svg>`;
+  const MAX_PRINT_DAYS = 14;
+
+  function renderPrint() {
+    const sheet = document.getElementById('print-sheet');
+    if (!sheet) return;
+    if (EMBED || !rx || mode === 'invalid' || mode === 'empty') { sheet.innerHTML = ''; return; }
+    const totalDays = Math.max(1, ...rx.m.map((m) => m.j || 1));
+    const n = Math.min(totalDays, MAX_PRINT_DAYS);
+    const days = Array.from({ length: n }, (_, k) => D.addDays(rx.d, k));
+    const short = (iso) => D.formatDate(iso, { day: '2-digit', month: '2-digit' });
+    const all = rx.m.map((m, i) => ({ m, i }));
+    const head = `<tr><th class="ps-medcol" scope="col"></th>${days.map((d, k) => `<th scope="col">${esc(t('print.day', { n: k + 1 }))}<br><small>${esc(short(d))}</small></th>`).join('')}</tr>`;
+    const medCell = (m) => `
+      <th scope="row" class="ps-med">
+        <span class="ps-pills">${D.pillsHTML(m, 26)}</span>
+        <span class="ps-text"><strong>${esc(`${m.q} ${D.unit(m.f, m.q)}`)}</strong> ${esc(m.n)}<br>${D.mealHTML(m.r, m)}</span>
+      </th>`;
+
+    let rows = '';
+    D.MOMENTS.forEach((mo) => {
+      const doses = all.filter((x) => !x.m.prn && (x.m.t || []).includes(mo.id));
+      if (!doses.length) return;
+      rows += `<tr class="ps-moment ps-${mo.id}"><th colspan="${n + 1}" scope="rowgroup">${D.momentSVG(mo.id, 30)}<span>${esc(t('moment.' + mo.id))}</span> <small>${esc(t('moment.' + mo.id + '.hint'))}</small></th></tr>`;
+      doses.forEach((x) => {
+        rows += `<tr>${medCell(x.m)}${days.map((_, k) => `<td class="${k < (x.m.j || 1) ? '' : 'na'}">${k < (x.m.j || 1) ? '<span class="box"></span>' : ''}</td>`).join('')}</tr>`;
+      });
+    });
+    const prn = all.filter((x) => x.m.prn);
+    if (prn.length) {
+      rows += `<tr class="ps-moment ps-prn"><th colspan="${n + 1}" scope="rowgroup"><span class="ps-q" aria-hidden="true">?</span><span>${esc(t('p.prnTitle'))}</span></th></tr>`;
+      prn.forEach((x) => {
+        const max = x.m.max || 3;
+        rows += `<tr>${medCell(x.m)}${days.map((_, k) => `<td class="${k < (x.m.j || 1) ? 'multi' : 'na'}">${k < (x.m.j || 1) ? '<span class="box sm"></span>'.repeat(max) : ''}</td>`).join('')}</tr>`;
+        rows += `<tr class="ps-note"><td colspan="${n + 1}">${esc(t('print.prnHow', { max }))}${x.m.note ? ' ' + esc(x.m.note) : ''}</td></tr>`;
+      });
+    }
+
+    const fiches = all.map((x) => ({ m: x.m, f: D.ficheFor(x.m) })).filter((x) => x.f);
+    const tel = rx.ph && rx.ph.t;
+    sheet.innerHTML = `
+      <section class="ps-page">
+        <header class="ps-head">
+          <div class="ps-brand">${D.ICON.logo}<span>Dose</span></div>
+          <h1>${esc(t('print.title'))}</h1>
+          <dl class="ps-meta">
+            ${rx.p && rx.p.n ? `<div><dt>${esc(t('print.for'))}</dt><dd>${esc(rx.p.n)}</dd></div>` : ''}
+            ${rx.ph && rx.ph.n ? `<div><dt>${esc(t('print.from'))}</dt><dd>${esc(rx.ph.n)}${tel ? ' · ' + esc(tel) : ''}</dd></div>` : ''}
+            <div><dt>${esc(t('print.start'))}</dt><dd>${esc(D.formatDate(rx.d))}</dd></div>
+          </dl>
+        </header>
+        <p class="ps-howto"><span class="box"></span> ${esc(t('print.howto'))} <span class="ps-na-key"></span> ${esc(t('print.na'))}</p>
+        <table class="ps-table"><thead>${head}</thead><tbody>${rows}</tbody></table>
+        ${totalDays > n ? `<p class="ps-more">${esc(t('print.more', { n }))}</p>` : ''}
+        ${rx.m.filter((m) => m.note && !m.prn).map((m) => `<p class="ps-advice"><strong>${esc(m.n)} :</strong> ${esc(m.note)}</p>`).join('')}
+        <p class="ps-foot">${tel ? esc(t('print.call', { tel })) + ' · ' : ''}${esc(t('disclaimer'))}</p>
+      </section>
+      ${fiches.length ? `
+      <section class="ps-page ps-back">
+        <h2>${esc(t('print.back'))}</h2>
+        <div class="ps-fiches">
+          ${fiches.map(({ m, f }) => `
+            <article class="ps-fiche">
+              <h3>${D.pillSVG(m.f, m.c, m.c2, 30)} ${esc(m.n)}${f.for ? ` <small>· ${esc(t('p.for', { what: f.for }))}</small>` : ''}</h3>
+              ${['use', 'how', 'alert'].filter((k) => f[k] && f[k].length).map((k) => `
+                <p class="ps-f-${k}"><strong>${{ use: '🎯', how: '✅', alert: '🚨' }[k]} ${esc(t('f.' + k))}</strong><br>${f[k].map(esc).join(' ')}</p>`).join('')}
+            </article>`).join('')}
+        </div>
+        <p class="ps-foot">${esc(t('f.source'))}</p>
+      </section>` : ''}`;
   }
 
   /* ---------- Fiche médicament ---------- */
@@ -429,6 +527,8 @@
       const parts = [rx.p && rx.p.n ? t('p.hello', { name: rx.p.n }) + '.' : '']
         .concat(P.moments.map(sayMoment), P.prn.map((x) => sayPrn(x.m)));
       D.speak(parts.join(' '), b);
+    } else if (a === 'print') {
+      window.print();
     } else if (a === 'voice') {
       const src = audioNote();
       if (!src) return;
@@ -467,5 +567,9 @@
   D.initChrome();
   loadFromHash();
   render();
+  if (params.has('print') && !EMBED && rx) {
+    const go = () => setTimeout(() => window.print(), 300);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(go); else go();
+  }
   if (EMBED && window.parent !== window) window.parent.postMessage({ type: 'dose:ready' }, '*');
 })();
