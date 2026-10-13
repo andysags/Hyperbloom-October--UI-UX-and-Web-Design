@@ -14,6 +14,10 @@ Projet pour le hackathon [HyperBloom October : UI/UX & Web Design](https://www.h
 - 🧑‍⚕️ [Vue pharmacien](pharmacien.html) : création de l'ordonnance, aperçu en direct, message vocal, QR code, WhatsApp et SMS.
 - 💊 [Vue patient](patient.html) : sans lien, elle affiche une ordonnance d'exemple (paludisme). Ajouter `?h=19` à l'adresse simule 19 h, pratique pour la démo. Le bouton « Imprimer ma feuille papier » produit un calendrier A4 avec des cases à cocher et, au dos, les fiches médicament.
 
+## Langues
+
+Interface en **français, anglais, espagnol, portugais et italien**, y compris la synthèse vocale, les fiches médicament et les noms des médicaments du catalogue. Les langues locales du Bénin (fon, yoruba, mina, dendi…) sont portées par le message vocal du pharmacien. Pour ajouter une langue, il suffit d'ajouter un fichier `assets/js/lang-xx.js`.
+
 ## Lancer en local
 
 Aucune installation n'est nécessaire : c'est un site statique.

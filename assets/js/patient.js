@@ -192,6 +192,7 @@
 
   /* ---------- Rendu ---------- */
   function render() {
+    rx = D.localizeRx(rx);
     const focusKey = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.key;
 
     if (mode === 'invalid') {
@@ -561,11 +562,18 @@
     rx = d.rx;
     mode = rx && rx.m && rx.m.length ? 'ok' : 'empty';
     loadTaken();
-    if (d.lang && d.lang !== D.lang()) D.setLang(d.lang); else render();
+    /* L'aperçu montre l'écran dans la langue du patient quand l'interface la parle */
+    const l = rx && rx.p && D.UI_LANGS[rx.p.l] ? rx.p.l : d.lang;
+    if (l && l !== D.lang()) D.setLang(l, { persist: false }); else render();
   });
 
   D.initChrome();
   loadFromHash();
+  /* Première ouverture : l'écran s'affiche dans la langue du patient si l'interface la parle */
+  if (mode === 'ok' && !EMBED && rx.p && D.UI_LANGS[rx.p.l] && !D.store.get('dose:langset:' + rx.id, false)) {
+    D.store.set('dose:langset:' + rx.id, true);
+    if (rx.p.l !== D.lang()) D.setLang(rx.p.l);
+  }
   render();
   if (params.has('print') && !EMBED && rx) {
     const go = () => setTimeout(() => window.print(), 300);

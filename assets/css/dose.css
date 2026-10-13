@@ -145,7 +145,24 @@ img, svg { max-width: 100%; }
 .listen svg { width: 24px; height: 24px; }
 .listen[aria-pressed="true"] { background: var(--primary); color: #fff; }
 
-/* Segmenté FR / EN */
+/* Sélecteur de langue */
+.lang-select {
+  position: relative; display: inline-flex; align-items: center;
+  border: 2px solid var(--line); border-radius: var(--radius-pill); background: var(--surface);
+}
+.lang-select:focus-within { outline: 3px solid var(--ink); outline-offset: 3px; box-shadow: 0 0 0 7px var(--morning); }
+.lang-globe { position: absolute; left: .7rem; display: grid; pointer-events: none; color: var(--ink-2); }
+.lang-globe svg { width: 20px; height: 20px; }
+.lang-select select {
+  appearance: none; -webkit-appearance: none; font: inherit; font-weight: 700; color: var(--ink);
+  min-height: 44px; padding: 0 2rem 0 2.4rem; border: 0; background: transparent; border-radius: var(--radius-pill); cursor: pointer;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%231B1F3B' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right .7rem center; background-size: 16px;
+}
+.lang-select select:focus-visible { outline: none; box-shadow: none; }
+.hint-voice.hint-info { background: var(--primary-soft); color: var(--primary); }
+
+/* Segmenté */
 .segmented { display: inline-flex; border: 2px solid var(--line); border-radius: var(--radius-pill); padding: 2px; }
 .segmented button {
   min-height: 40px; min-width: 44px; padding: 0 .8rem; font: inherit; font-weight: 700;

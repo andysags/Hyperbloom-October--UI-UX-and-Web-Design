@@ -17,10 +17,11 @@
   <header class="site-header">
     <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span></a>
     <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
-      <div class="segmented" role="group" data-i18n-attr="aria-label:a11y.lang">
-        <button type="button" data-set-lang="fr" aria-pressed="true" lang="fr" aria-label="Français">FR</button>
-        <button type="button" data-set-lang="en" aria-pressed="false" lang="en" aria-label="English">EN</button>
-      </div>
+      <label class="lang-select">
+        <span class="sr-only" data-i18n="a11y.lang">Langue</span>
+        <span class="lang-globe" data-globe aria-hidden="true"></span>
+        <select data-lang-select></select>
+      </label>
       <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
         <span aria-hidden="true">Aa</span> <span data-i18n="a11y.bigtext">Texte agrandi</span>
       </button>
@@ -104,6 +105,9 @@
   <footer><p data-i18n="disclaimer"></p></footer>
 
   <script src="assets/js/core.js"></script>
+  <script src="assets/js/lang-es.js"></script>
+  <script src="assets/js/lang-pt.js"></script>
+  <script src="assets/js/lang-it.js"></script>
   <script>
   (function () {
     const D = window.Dose, t = D.t, esc = D.esc;

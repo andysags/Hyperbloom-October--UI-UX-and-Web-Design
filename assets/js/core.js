@@ -100,6 +100,9 @@
     }
   };
 
+  /* Accès en lecture, utilisé par le contrôle des traductions */
+  Dose.strings = (l) => Object.assign({}, STR[l]);
+
   Dose.addStrings = function (extra) {
     Object.keys(extra).forEach((l) => Object.assign(STR[l] = STR[l] || {}, extra[l]));
   };
@@ -125,15 +128,24 @@
       });
     });
     document.documentElement.lang = lang;
-    document.querySelectorAll('[data-set-lang]').forEach((b) => {
-      b.setAttribute('aria-pressed', String(b.dataset.setLang === lang));
-    });
+    document.querySelectorAll('[data-lang-select]').forEach((sel) => { sel.value = lang; });
   };
 
-  Dose.setLang = function (l) {
-    if (!STR[l]) return;
+  /* Langues de l'interface (et de la synthèse vocale) */
+  Dose.UI_LANGS = {
+    fr: { name: 'Français', locale: 'fr-FR' },
+    en: { name: 'English', locale: 'en-GB' },
+    es: { name: 'Español', locale: 'es-ES' },
+    pt: { name: 'Português', locale: 'pt-PT' },
+    it: { name: 'Italiano', locale: 'it-IT' }
+  };
+  Dose.locale = () => (Dose.UI_LANGS[lang] || Dose.UI_LANGS.fr).locale;
+
+  /* persist: false pour l'aperçu intégré, qui ne doit pas changer la langue de la page parente */
+  Dose.setLang = function (l, opts) {
+    if (!STR[l] || !Dose.UI_LANGS[l]) return;
     lang = l;
-    Dose.store.set('dose:lang', l);
+    if (!opts || opts.persist !== false) Dose.store.set('dose:lang', l);
     Dose.applyI18n();
     document.dispatchEvent(new CustomEvent('dose:lang', { detail: l }));
   };
@@ -293,14 +305,17 @@
     logo: `<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false"><rect width="48" height="48" rx="14" fill="#2B3A8C"/><g transform="rotate(-35 24 24)"><path d="M24 15h-9a9 9 0 0 0 0 18h9z" fill="#F2B33D"/><path d="M24 15h9a9 9 0 0 1 0 18h-9z" fill="#fff"/></g></svg>`
   };
 
+  Dose.ICON.globe = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="9.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M2.5 12h19M12 2.5c2.8 3 2.8 16 0 19M12 2.5c-2.8 3-2.8 16 0 19" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
   Dose.ICON.close = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/></svg>`;
   Dose.ICON.phone = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>`;
   Dose.ICON.play = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>`;
 
   /* ---------- Langues parlées par le patient ---------- */
+  /* Les langues de l'interface ouvrent l'écran du patient dans sa langue ;
+     les langues locales sont portées par le message vocal du pharmacien. */
   Dose.LANGS = {
-    fr: 'Français', en: 'English', fon: 'Fɔngbè', yo: 'Yorùbá',
-    gen: 'Gɛn (mina)', ddn: 'Dendi', bba: 'Baatɔnum', adj: 'Ajagbe'
+    fr: 'Français', en: 'English', es: 'Español', pt: 'Português', it: 'Italiano',
+    fon: 'Fɔngbè', yo: 'Yorùbá', gen: 'Gɛn (mina)', ddn: 'Dendi', bba: 'Baatɔnum', adj: 'Ajagbe'
   };
 
   /* ---------- Ordonnance dans le lien : JSON → UTF-8 → base64url ---------- */
@@ -326,7 +341,7 @@
   Dose.addDays = (iso, n) => { const d = Dose.parseDate(iso); d.setDate(d.getDate() + n); return Dose.isoDate(d); };
   Dose.daysBetween = (a, b) => Math.round((Dose.parseDate(b) - Dose.parseDate(a)) / 86400000);
   Dose.formatDate = (iso, opts) => Dose.parseDate(iso).toLocaleDateString(
-    lang === 'en' ? 'en-GB' : 'fr-FR', opts || { weekday: 'long', day: 'numeric', month: 'long' });
+    Dose.locale(), opts || { weekday: 'long', day: 'numeric', month: 'long' });
 
   /* ---------- Voix (synthèse vocale du navigateur) ---------- */
   Dose.canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
@@ -343,7 +358,7 @@
     Dose.stopSpeaking();
     if (same) return;
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang === 'en' ? 'en-GB' : 'fr-FR';
+    u.lang = Dose.locale();
     u.rate = 0.9;
     u.onend = u.onerror = () => { if (speakingBtn === btn) Dose.stopSpeaking(); };
     if (btn) { speakingBtn = btn; btn.setAttribute('aria-pressed', 'true'); }
@@ -356,9 +371,13 @@
   /* ---------- Préférences communes (langue, texte agrandi) ---------- */
   Dose.initChrome = function () {
     if (Dose.store.get('dose:bigtext', false)) document.documentElement.classList.add('big-text');
-    document.querySelectorAll('[data-set-lang]').forEach((b) => {
-      b.addEventListener('click', () => Dose.setLang(b.dataset.setLang));
+    if (!Dose.UI_LANGS[lang] || !STR[lang]) lang = 'fr';
+    document.querySelectorAll('[data-lang-select]').forEach((sel) => {
+      sel.innerHTML = Object.entries(Dose.UI_LANGS)
+        .map(([k, v]) => `<option value="${k}" lang="${k}">${v.name}</option>`).join('');
+      sel.addEventListener('change', () => Dose.setLang(sel.value));
     });
+    document.querySelectorAll('[data-globe]').forEach((el) => { el.innerHTML = Dose.ICON.globe; });
     document.querySelectorAll('[data-action="bigtext"]').forEach((b) => {
       b.setAttribute('aria-pressed', String(document.documentElement.classList.contains('big-text')));
       b.addEventListener('click', () => {

@@ -115,8 +115,8 @@ L'aidant reçoit le même lien et voit les prises cochées. L'écran est présen
 | **Format du rendu** | Prototype web codé et déployé (GitHub Pages) | Plus convaincant qu'une maquette statique et testable par le jury |
 | **Données** | L'ordonnance est **encodée dans le lien ou le QR code**. Aucun serveur, aucun compte | Confidentialité des données de santé, simplicité, fonctionne sans backend |
 | **Message vocal** | Enregistré dans le navigateur, **conservé sur l'appareil** dans le prototype | Un fichier audio ne tient pas dans un lien. Le stockage en ligne est prévu dans la feuille de route |
-| **Langues de l'interface** | Français et anglais | Authenticité locale et lisibilité pour un jury anglophone |
-| **Langues locales** | Portées par la **voix du pharmacien**, pas par la synthèse vocale | La synthèse en fon ou en yoruba n'est pas fiable. Une voix humaine rassure davantage |
+| **Langues de l'interface** | Français, anglais, espagnol, portugais, italien (un fichier par langue) | Jury international. Si le patient parle l'une de ces langues, son écran s'ouvre directement dans sa langue |
+| **Langues locales** | Conservées (fon, yoruba, mina, dendi, baatonum, ajagbe) et portées par la **voix du pharmacien** | C'est le cœur de l'originalité du projet. La synthèse vocale en fon ou en yoruba n'est pas fiable, et une voix humaine rassure davantage |
 | **Rappels** | Conçus et montrés (écran, SMS), non fonctionnels | Ils demandent une PWA ou un backend SMS, hors périmètre du hackathon |
 | **Fiche médicament** | Préremplie depuis le catalogue, **validée et modifiable par le pharmacien**, ouverte à la demande par le patient | Comprendre son traitement aide à le suivre jusqu'au bout, sans surcharger l'écran du jour ni exposer une information privée |
 | **Posologies complexes** | Gérées par un **conseil texte et vocal** | Garde l'interface simple pour 95 % des cas |

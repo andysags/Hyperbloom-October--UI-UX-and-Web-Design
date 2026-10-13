@@ -221,25 +221,77 @@
     const key = (item && item.fiche) || med.k;
     const f = Dose.FICHES[key];
     if (!f) return null;
-    const loc = f[Dose.lang()] || f.fr;
+    const loc = f[Dose.lang()] || f.en || f.fr;
     return Object.assign({}, loc, { for: med.fp || loc.for });
+  };
+
+  Dose.addStrings({
+    fr: {
+      'med.al': 'Artéméther-Luméfantrine',
+      'med.para': 'Paracétamol',
+      'med.ibu': 'Ibuprofène',
+      'med.amox': 'Amoxicilline',
+      'med.amoxs': 'Amoxicilline sirop',
+      'med.fer': 'Fer + acide folique',
+      'med.sro': 'Sels de réhydratation orale (SRO)',
+      'med.zinc': 'Zinc',
+      'med.metf': 'Metformine',
+      'med.amlo': 'Amlodipine',
+      'med.ome': 'Oméprazole',
+      'demo.ph': 'Pharmacie du Marché (exemple)',
+      'demo.noteAl': 'Avec un repas ou un verre de lait.',
+      'demo.notePara': 'Si fièvre ou douleur. Attendez 6 heures entre deux prises.'
+    },
+    en: {
+      'med.al': 'Artemether-Lumefantrine',
+      'med.para': 'Paracetamol',
+      'med.ibu': 'Ibuprofen',
+      'med.amox': 'Amoxicillin',
+      'med.amoxs': 'Amoxicillin syrup',
+      'med.fer': 'Iron + folic acid',
+      'med.sro': 'Oral rehydration salts (ORS)',
+      'med.zinc': 'Zinc',
+      'med.metf': 'Metformin',
+      'med.amlo': 'Amlodipine',
+      'med.ome': 'Omeprazole',
+      'demo.ph': 'Market Pharmacy (example)',
+      'demo.noteAl': 'With a meal or a glass of milk.',
+      'demo.notePara': 'If fever or pain. Wait 6 hours between doses.'
+    }
+  });
+
+  /* Nom affiché dans la langue courante, si le pharmacien a gardé le nom du catalogue
+     (quelle que soit la langue dans laquelle il a été saisi). Un nom modifié reste tel quel. */
+  Dose.medName = function (m) {
+    if (!m.k || !Dose.catalogItem(m.k)) return m.n;
+    const key = 'med.' + m.k;
+    const known = Object.keys(Dose.UI_LANGS || {}).map((l) => Dose.strings(l)[key]).filter(Boolean);
+    known.push(Dose.catalogItem(m.k).n);
+    const same = (a, b) => a.trim().toLowerCase() === b.trim().toLowerCase();
+    if (!known.some((n) => same(n, m.n))) return m.n;
+    const tr = Dose.t(key);
+    return tr === key ? m.n : tr;
+  };
+  Dose.localizeRx = function (rx) {
+    if (!rx || !Array.isArray(rx.m)) return rx;
+    return Object.assign({}, rx, { m: rx.m.map((m) => Object.assign({}, m, { n: Dose.medName(m) })) });
   };
 
   /* Ordonnance d'exemple : paludisme, commencée hier (on est au jour 2) */
   Dose.demo = function () {
-    const fr = Dose.lang() !== 'en';
+    const t = Dose.t;
     return {
       v: 1,
       id: 'demo',
       p: { n: 'Afi', l: 'fon' },
-      ph: { n: fr ? 'Pharmacie du Marché (exemple)' : 'Market Pharmacy (example)', t: '' },
+      ph: { n: t('demo.ph'), t: '' },
       d: Dose.addDays(Dose.today(), -1),
       m: [
-        { k: 'al', n: 'Artéméther-Luméfantrine', s: '20/120 mg', f: 'round', c: 'yellow', q: 4, t: ['morning', 'evening'], r: 'with', j: 3,
-          note: fr ? 'Avec un repas ou un verre de lait.' : 'With a meal or a glass of milk.' },
-        { k: 'fer', n: 'Fer + acide folique', s: '', f: 'round', c: 'red', q: 1, t: ['morning'], r: 'before', j: 30 },
-        { k: 'para', n: 'Paracétamol', s: '500 mg', f: 'round', c: 'white', q: 2, t: [], r: 'any', j: 5, prn: true, max: 3,
-          note: fr ? 'Si fièvre ou douleur. Attendez 6 heures entre deux prises.' : 'If fever or pain. Wait 6 hours between doses.' }
+        { k: 'al', n: t('med.al'), s: '20/120 mg', f: 'round', c: 'yellow', q: 4, t: ['morning', 'evening'], r: 'with', j: 3,
+          note: t('demo.noteAl') },
+        { k: 'fer', n: t('med.fer'), s: '', f: 'round', c: 'red', q: 1, t: ['morning'], r: 'before', j: 30 },
+        { k: 'para', n: t('med.para'), s: '500 mg', f: 'round', c: 'white', q: 2, t: [], r: 'any', j: 5, prn: true, max: 3,
+          note: t('demo.notePara') }
       ]
     };
   };

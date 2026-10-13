@@ -14,6 +14,7 @@
       'ph.example': 'Remplir avec un exemple', 'ph.reset': 'Tout effacer',
       'ph.patient': 'Patient', 'ph.patientName': 'Prénom ou surnom', 'ph.patientLang': 'Langue parlée',
       'ph.langHint': 'Votre patient parle {lang} : enregistrez un message vocal dans sa langue (étape 4).',
+      'ph.langUi': 'L’écran du patient s’affichera en {lang}.',
       'ph.pharmacy': 'Votre pharmacie', 'ph.pharmacyName': 'Nom de la pharmacie',
       'ph.pharmacyTel': 'Téléphone (facultatif)', 'ph.start': 'Début du traitement',
       'ph.remember': 'Ces informations sont gardées sur cet appareil pour la prochaine ordonnance.',
@@ -68,6 +69,7 @@
       'ph.example': 'Fill with an example', 'ph.reset': 'Clear all',
       'ph.patient': 'Patient', 'ph.patientName': 'First name or nickname', 'ph.patientLang': 'Language spoken',
       'ph.langHint': 'Your patient speaks {lang}: record a voice message in their language (step 4).',
+      'ph.langUi': 'The patient’s screen will be shown in {lang}.',
       'ph.pharmacy': 'Your pharmacy', 'ph.pharmacyName': 'Pharmacy name',
       'ph.pharmacyTel': 'Phone (optional)', 'ph.start': 'Treatment start',
       'ph.remember': 'These details are kept on this device for the next prescription.',
@@ -151,7 +153,7 @@
     $('#catalog-list').innerHTML = D.CATALOG.map((m) => `<option value="${esc(m.n)}">${esc(m.s || '')}</option>`).join('');
     $('#quick-list').innerHTML = ['al', 'para', 'amox', 'fer', 'sro', 'ibu'].map((k) => {
       const m = D.catalogItem(k);
-      return `<button type="button" class="quick-btn" data-quick="${k}">${D.pillSVG(m.f, m.c, m.c2, 24)}<span>${esc(m.n.replace(/ \(.+\)$/, ''))}</span></button>`;
+      return `<button type="button" class="quick-btn" data-quick="${k}">${D.pillSVG(m.f, m.c, m.c2, 24)}<span>${esc(D.medName(m).replace(/ \(.+\)$/, ''))}</span></button>`;
     }).join('');
     $('#preview-close').innerHTML = D.ICON.close;
     updateLangHint();
@@ -160,15 +162,19 @@
   function updateLangHint() {
     const l = $('#p-lang').value;
     const hint = $('#lang-hint');
-    const local = l && l !== 'fr' && l !== 'en';
-    hint.hidden = !local;
+    const local = l && !D.UI_LANGS[l];
+    const other = l && D.UI_LANGS[l] && l !== D.lang();
+    hint.hidden = !local && !other;
+    hint.classList.toggle('hint-info', !!other);
     if (local) hint.textContent = t('ph.langHint', { lang: D.LANGS[l] });
+    else if (other) hint.textContent = t('ph.langUi', { lang: D.LANGS[l] });
   }
 
   /* ---------- Médicaments ---------- */
   function addMed(src) {
     const base = src && src.k ? JSON.parse(JSON.stringify(src)) : { n: (src && src.n) || '', s: '', f: 'round', c: 'white', q: 1, t: [], r: 'any', j: 5 };
     delete base.fiche;
+    if (base.k) base.n = D.medName(base);
     base.t = base.t || [];
     base._u = ++uid;
     base._open = !base.k;
