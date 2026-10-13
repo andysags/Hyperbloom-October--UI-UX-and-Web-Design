@@ -79,7 +79,32 @@ Cas particuliers :
 
 C'est le même calendrier, imprimé : pictogrammes des moments, dessins des médicaments, et **une case à cocher au stylo par prise et par jour**. Elle est indispensable pour les patients sans smartphone.
 
-### 4.4 Aidant (concept, hors prototype codé)
+### 4.4 Fiche médicament : « À quoi sert ce médicament ? »
+
+Chaque médicament prescrit a une fiche courte, en langage simple, organisée en **5 blocs** avec un pictogramme chacun et **3 éléments maximum par bloc** :
+
+| Bloc | Exemple (antipaludique artéméther-luméfantrine) |
+|---|---|
+| 🎯 **À quoi il sert** | « Il tue le parasite du paludisme dans votre sang. » |
+| ✅ **Pourquoi aller jusqu'au bout** | « Même si la fièvre part, le parasite est encore là. Si vous arrêtez, le paludisme peut revenir plus fort. » |
+| 😐 **Ce qui peut arriver, sans danger** | « Un peu de fatigue, des vertiges, moins d'appétit. » |
+| 🚨 **Quand revenir à la pharmacie ou aller à l'hôpital** | « Vous vomissez le médicament dans l'heure, la fièvre est toujours là après 3 jours, vous êtes enceinte. » |
+| 🚫 **À éviter** | « Ne le prenez pas l'estomac vide. » |
+
+Un bouton 🔊 lit la fiche à voix haute.
+
+**Où la fiche apparaît :**
+- **Côté patient :** un bouton « ⓘ À quoi sert ce médicament ? » sous chaque prise ouvre la fiche en plein écran. L'écran du jour reste simple (divulgation progressive).
+- **Côté pharmacien :** la fiche est **préremplie** dès qu'il choisit un médicament du catalogue. Une case « Inclure la fiche » permet de la retirer, et la ligne « Pour : » reste modifiable.
+- **Sur papier :** une version courte (blocs 🎯, ✅ et 🚨) au dos de la feuille.
+
+**Règles de contenu :**
+1. **Le pharmacien valide toujours la fiche.** Un médicament peut servir à plusieurs choses. Une fiche générique peut donc être fausse pour ce patient, ou révéler une maladie qu'il préfère garder privée. Le pharmacien peut la **modifier, la raccourcir ou la masquer**.
+2. **Rassurer sans effrayer.** On sépare « normal, sans danger » des « signes d'alerte », sans jamais lister tous les effets indésirables. Une longue liste pousse à arrêter le traitement.
+3. **Sources traçables.** Les fiches du prototype s'appuient sur les notices officielles et les recommandations de l'OMS, et portent la mention « contenu à valider par un pharmacien ». Les entretiens servent aussi à faire relire 2 ou 3 fiches par un professionnel.
+4. **Rédaction simple :** phrases courtes, un mot de jargon au maximum, toujours expliqué.
+
+### 4.5 Aidant (concept, hors prototype codé)
 
 L'aidant reçoit le même lien et voit les prises cochées. L'écran est présenté dans l'étude de cas comme une évolution prévue.
 
@@ -93,6 +118,7 @@ L'aidant reçoit le même lien et voit les prises cochées. L'écran est présen
 | **Langues de l'interface** | Français et anglais | Authenticité locale et lisibilité pour un jury anglophone |
 | **Langues locales** | Portées par la **voix du pharmacien**, pas par la synthèse vocale | La synthèse en fon ou en yoruba n'est pas fiable. Une voix humaine rassure davantage |
 | **Rappels** | Conçus et montrés (écran, SMS), non fonctionnels | Ils demandent une PWA ou un backend SMS, hors périmètre du hackathon |
+| **Fiche médicament** | Préremplie depuis le catalogue, **validée et modifiable par le pharmacien**, ouverte à la demande par le patient | Comprendre son traitement aide à le suivre jusqu'au bout, sans surcharger l'écran du jour ni exposer une information privée |
 | **Posologies complexes** | Gérées par un **conseil texte et vocal** | Garde l'interface simple pour 95 % des cas |
 
 ## 6. Principes d'accessibilité
@@ -112,6 +138,8 @@ L'aidant reçoit le même lien et voit les prises cochées. L'écran est présen
 - Page d'accueil qui présente le problème et la solution (avant/après).
 - Vue pharmacien : formulaire, aperçu en direct, message vocal, remise par QR, lien, WhatsApp, SMS ou impression.
 - Vue patient : écran du jour, prises à cocher, écoute, oubli, « si besoin », fin de traitement.
+- Fiche médicament : lecture côté patient, préremplissage et modification côté pharmacien, version courte imprimée.
+- Catalogue d'une dizaine de médicaments courants avec leur fiche (antipaludique, paracétamol, amoxicilline, fer, SRO…).
 - Feuille imprimable.
 - Ordonnance d'exemple pour le jury (paludisme : antipaludique, paracétamol, fer).
 
@@ -143,6 +171,8 @@ Objectif : **2 ou 3 entretiens de 15 minutes**, pour obtenir des citations réel
 - Vous est-il déjà arrivé d'oublier ou de vous tromper ?
 - Qui vous aide à lire les papiers médicaux ?
 - Quel téléphone avez-vous ? Utilisez-vous WhatsApp ?
+
+**À faire relire par un pharmacien :** 2 ou 3 fiches médicament du catalogue (justesse, simplicité, ton rassurant).
 
 **Test rapide à faire avec la maquette :** montrer l'écran d'une prise **sans rien expliquer** et demander : « Que devez-vous faire, et quand ? »
 
