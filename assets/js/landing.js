@@ -1,5 +1,5 @@
 /* =========================================================
-   Dose — page d'accueil
+   Dose: home page
    ========================================================= */
 (function () {
   'use strict';
@@ -68,7 +68,7 @@
   const FER = { f: 'round', c: 'red', q: 1, n: 'Fer + acide folique', r: 'before' };
 
   function render() {
-    /* Mini écran patient de l'avant/après */
+    /* Mini patient screen for the before/after */
     document.getElementById('mini-card').innerHTML = `
       <div class="mini-moment">
         ${D.momentSVG('evening', 48)}
@@ -82,7 +82,7 @@
         <span class="take mini-take">${D.ICON.check}<span>${esc(t('take'))}</span></span>
       </div>`;
 
-    /* Visuels des étapes */
+    /* Step visuals */
     document.getElementById('step1').innerHTML = `
       <span class="chip">${D.pillSVG('round', 'yellow', null, 22)} Artéméther…</span>
       <span class="step-moments">${D.MOMENTS.map((m) => D.momentSVG(m.id, 30)).join('')}</span>

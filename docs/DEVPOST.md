@@ -1,6 +1,6 @@
 # Devpost submission: ready to paste
 
-> Copy each section into the matching Devpost field. The one line in `[brackets]` is optional: replace it with a personal sentence, or delete it.
+> Copy each section into the matching Devpost field. Everything is ready to paste as is.
 
 ---
 
@@ -13,8 +13,11 @@ Dose turns a prescription into a visual, spoken calendar for patients who can't 
 ## Try it out
 - Live prototype: https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/
 - Patient example: https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/patient.html?lang=en
-- Pharmacist view: https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/pharmacien.html?lang=en
+- Pharmacist view: https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/pharmacist.html?lang=en
 - Code: https://github.com/andysags/Hyperbloom-October--UI-UX-and-Web-Design
+
+## Video demo
+Upload `video/dose-film.mp4` to YouTube (public or unlisted) and paste the YouTube link in the “Video demo link” field.
 
 ## Image gallery (in this order)
 `docs/gallery/01-home.png` · `02-patient.png` · `03-pharmacist.png` · `04-handoff.png` · `05-paper.png` · `06-languages.png`
@@ -22,7 +25,7 @@ Dose turns a prescription into a visual, spoken calendar for patients who can't 
 ---
 
 ## Inspiration
-In Benin, a prescription is handwritten, full of abbreviations (“4 tab x2/d w/ meals x3d”) and almost always in French, while many patients first speak Fon, Yoruba or Mina and read little. The pharmacist explains the treatment at the counter, and the patient forgets it on the way home. The result is wrong doses, missed doses, and antimalarials or antibiotics stopped too early. [Add one sentence about a personal experience, e.g. a relative who mixed up their medicines.]
+In Benin, a prescription is handwritten, full of abbreviations (“4 tab x2/d w/ meals x3d”) and almost always in French, while many patients first speak Fon, Yoruba or Mina and read little. The pharmacist explains the treatment at the counter, and the patient forgets it on the way home. The result is wrong doses, missed doses, and antimalarials or antibiotics stopped too early.
 
 We wanted to design for the people most health apps forget: those who can't read the instructions at all.
 

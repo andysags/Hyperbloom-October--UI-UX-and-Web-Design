@@ -1,6 +1,6 @@
 /* =========================================================
-   Dose — traduction italienne (italiano)
-   Fiches médicament : contenu indicatif, à faire valider par un pharmacien.
+   Dose: Italian translation (italiano)
+   Medicine sheets: indicative content, to be validated by a pharmacist.
    ========================================================= */
 (function () {
   'use strict';

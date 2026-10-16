@@ -1,6 +1,6 @@
 /* =========================================================
-   Dose — vue pharmacien
-   Saisie rapide, aperçu en direct, message vocal, remise au patient.
+   Dose: pharmacist view
+   Fast entry, live preview, voice message, hand-off to the patient.
    ========================================================= */
 (function () {
   'use strict';
@@ -125,12 +125,12 @@
   const frame = $('#preview-frame');
   const resultEl = $('#result');
 
-  /* ---------- État ---------- */
+  /* ---------- State ---------- */
   let rxId = D.newId();
   let meds = [];
   let uid = 0;
   let startedAt = null;
-  let usedExample = false; /* le chronomètre n'a de sens que pour une vraie saisie */
+  let usedExample = false; /* the timer only makes sense for a real entry */
   let generated = false;
 
   const pharmacy = D.store.get('dose:pharmacy', { n: '', t: '' });
@@ -145,7 +145,7 @@
     schedulePreview();
   }
 
-  /* ---------- Listes statiques ---------- */
+  /* ---------- Static lists ---------- */
   function renderStatic() {
     const sel = $('#p-lang');
     const cur = sel.value || 'fr';
@@ -171,7 +171,7 @@
     else if (other) hint.textContent = t('ph.langUi', { lang: D.LANGS[l] });
   }
 
-  /* ---------- Médicaments ---------- */
+  /* ---------- Medicines ---------- */
   function addMed(src) {
     const base = src && src.k ? JSON.parse(JSON.stringify(src)) : { n: (src && src.n) || '', s: '', f: 'round', c: 'white', q: 1, t: [], r: 'any', j: 5 };
     delete base.fiche;
@@ -336,7 +336,7 @@
     $('#no-meds').hidden = meds.length > 0;
   }
 
-  /* Mise à jour légère d'une carte (sans tout redessiner, pour garder le focus) */
+  /* Light card update (no full redraw, so focus is kept) */
   function refreshCard(m) {
     const card = list.querySelector(`[data-u="${m._u}"]`);
     if (!card) return;
@@ -419,7 +419,7 @@
     card.querySelector('[data-edit]').setAttribute('aria-expanded', String(open));
   }
 
-  /* ---------- Erreurs ---------- */
+  /* ---------- Errors ---------- */
   function setFieldError(errId, msg, input) {
     const p = document.getElementById(errId);
     if (p) { p.textContent = msg; p.hidden = false; }
@@ -470,7 +470,7 @@
     if (target) { target.focus(); target.scrollIntoView({ block: 'center' }); }
   });
 
-  /* ---------- Construction de l'ordonnance (format compact du lien) ---------- */
+  /* ---------- Building the prescription (compact link format) ---------- */
   function buildRx() {
     return {
       v: 1,
@@ -492,7 +492,7 @@
     };
   }
 
-  /* ---------- Aperçu en direct ---------- */
+  /* ---------- Live preview ---------- */
   let previewTimer = null;
   function schedulePreview() {
     clearTimeout(previewTimer);
@@ -506,7 +506,7 @@
     if (e.data && e.data.type === 'dose:ready') sendPreview();
   });
 
-  /* Sur petit écran, l'aperçu s'ouvre par-dessus le formulaire */
+  /* On small screens, the preview opens over the form */
   const preview = $('#preview');
   const openBtn = $('#preview-open');
   openBtn.addEventListener('click', () => {
@@ -522,7 +522,7 @@
     openBtn.focus();
   }
 
-  /* ---------- Message vocal ---------- */
+  /* ---------- Voice message ---------- */
   const voice = $('#voice');
   const audioKey = () => 'dose:audio:' + rxId;
   let recorder = null, recTimer = null, recStart = 0, recStream = null;
@@ -577,14 +577,14 @@
     } else if (e.target.closest('#rec-stop')) {
       if (recorder) recorder.stop();
     } else if (e.target.closest('#rec-delete')) {
-      try { localStorage.removeItem(audioKey()); } catch (err) { /* rien */ }
+      try { localStorage.removeItem(audioKey()); } catch (err) { /* nothing to do */ }
       renderVoice();
       voice.querySelector('#rec-start') && voice.querySelector('#rec-start').focus();
       touch();
     }
   });
 
-  /* ---------- Création et remise ---------- */
+  /* ---------- Creation and hand-off ---------- */
   function patientUrl(rx) {
     return new URL('patient.html', location.href).href.split('#')[0] + '#d=' + D.encode(rx);
   }
@@ -664,7 +664,7 @@
     renderResult(buildRx());
   });
 
-  /* ---------- Exemple et remise à zéro ---------- */
+  /* ---------- Example and reset ---------- */
   function resetAll(skipConfirm) {
     if (!skipConfirm && (meds.length || $('#p-name').value) && !confirm(t('ph.confirmReset'))) return;
     rxId = D.newId();
@@ -696,7 +696,7 @@
   });
   $('#reset').addEventListener('click', () => resetAll(false));
 
-  /* ---------- Champs généraux ---------- */
+  /* ---------- General fields ---------- */
   $('#add-med').addEventListener('click', addFromSearch);
   $('#med-search').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); addFromSearch(); } });
   $('#quick-list').addEventListener('click', (e) => {

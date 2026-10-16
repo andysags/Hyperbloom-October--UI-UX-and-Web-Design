@@ -1,7 +1,7 @@
 /* =========================================================
-   Dose — noyau partagé
-   Traductions, constantes, dessins des médicaments et pictogrammes.
-   Script classique (pas de module) pour fonctionner aussi en file://.
+   Dose: shared core
+   Translations, constants, medicine drawings and pictograms.
+   Classic script (not a module) so it also works from file://.
    ========================================================= */
 (function () {
   'use strict';
@@ -9,7 +9,7 @@
   const Dose = (window.Dose = window.Dose || {});
   const INK = '#1B1F3B';
 
-  /* ---------- Stockage sûr ---------- */
+  /* ---------- Safe storage ---------- */
   Dose.store = {
     get(key, fallback) {
       try {
@@ -18,7 +18,7 @@
       } catch (e) { return fallback; }
     },
     set(key, value) {
-      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* mode privé */ }
+      try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* private mode */ }
     }
   };
 
@@ -26,7 +26,7 @@
     { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
   ));
 
-  /* ---------- Traductions ---------- */
+  /* ---------- Translations ---------- */
   const STR = {
     fr: {
       'a11y.skip': 'Aller au contenu',
@@ -100,15 +100,18 @@
     }
   };
 
-  /* Accès en lecture, utilisé par le contrôle des traductions */
+  /* Read access, used by the translation completeness check */
   Dose.strings = (l) => Object.assign({}, STR[l]);
 
   Dose.addStrings = function (extra) {
     Object.keys(extra).forEach((l) => Object.assign(STR[l] = STR[l] || {}, extra[l]));
   };
 
-  /* Le public cible est francophone : français par défaut, sauf choix explicite. */
-  let lang = Dose.store.get('dose:lang', null) || 'fr';
+  /* Saved choice first, then the browser language if the interface speaks it, else English. */
+  const SUPPORTED = ['fr', 'en', 'es', 'pt', 'it'];
+  const fromBrowser = (navigator.languages || [navigator.language || 'en'])
+    .map((l) => String(l).slice(0, 2).toLowerCase()).find((l) => SUPPORTED.includes(l));
+  let lang = Dose.store.get('dose:lang', null) || fromBrowser || 'en';
 
   Dose.lang = () => lang;
 
@@ -131,7 +134,7 @@
     document.querySelectorAll('[data-lang-select]').forEach((sel) => { sel.value = lang; });
   };
 
-  /* Langues de l'interface (et de la synthèse vocale) */
+  /* Interface languages (also used for text-to-speech) */
   Dose.UI_LANGS = {
     fr: { name: 'Français', locale: 'fr-FR' },
     en: { name: 'English', locale: 'en-GB' },
@@ -141,7 +144,7 @@
   };
   Dose.locale = () => (Dose.UI_LANGS[lang] || Dose.UI_LANGS.fr).locale;
 
-  /* persist: false pour l'aperçu intégré, qui ne doit pas changer la langue de la page parente */
+  /* persist: false for the embedded preview, which must not change the parent page's language */
   Dose.setLang = function (l, opts) {
     if (!STR[l] || !Dose.UI_LANGS[l]) return;
     lang = l;
@@ -150,7 +153,7 @@
     document.dispatchEvent(new CustomEvent('dose:lang', { detail: l }));
   };
 
-  /* ---------- Constantes ---------- */
+  /* ---------- Constants ---------- */
   Dose.MOMENTS = [
     { id: 'morning', hour: 7 },
     { id: 'noon', hour: 12 },
@@ -167,7 +170,7 @@
 
   Dose.unit = (form, n) => Dose.t(`unit.${UNIT_OF_FORM[form] || 'tablet'}.${n > 1 ? 'n' : '1'}`);
 
-  /* ---------- Dessins des médicaments ---------- */
+  /* ---------- Medicine drawings ---------- */
   Dose.pillSVG = function (form, color, color2, size) {
     size = size || 48;
     const c = Dose.COLORS[color] || Dose.COLORS.white;
@@ -207,7 +210,7 @@
     return `<svg class="pill" viewBox="0 0 48 48" width="${size}" height="${size}" aria-hidden="true" focusable="false">${body}</svg>`;
   };
 
-  /* Quantité dessinée : 4 comprimés = 4 dessins (au-delà de 4, dessin + « × n ») */
+  /* Drawn quantity: 4 tablets = 4 drawings (above 4, one drawing + “× n”) */
   Dose.pillsHTML = function (med, size) {
     const q = Math.max(1, med.q || 1);
     const one = Dose.pillSVG(med.f, med.c, med.c2, size || 40);
@@ -215,7 +218,7 @@
     return `<span class="pill-row" aria-hidden="true">${one}<span class="pill-count">× ${q}</span></span>`;
   };
 
-  /* ---------- Pictogrammes des moments ---------- */
+  /* ---------- Time-of-day pictograms ---------- */
   const rays = (cx, cy, r1, r2, n, color) => {
     let out = '';
     for (let i = 0; i < n; i++) {
@@ -238,27 +241,27 @@
   };
 
   const MOMENT_ART = {
-    /* Soleil levant : demi-soleil jaune au-dessus de l'horizon, flèche vers le haut */
+    /* Sunrise: yellow half sun above the horizon, arrow pointing up */
     morning: () => `
       <rect width="64" height="64" rx="18" fill="#FFF4D6"/>
       ${halfRays(32, 40, 15, 21, '#C98A0C')}
       <path d="M20 40a12 12 0 0 1 24 0z" fill="#F2B33D" stroke="${INK}" stroke-width="2.5"/>
       <line x1="10" y1="40" x2="54" y2="40" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
       <path d="M32 54v-8m-4 4 4-4 4 4" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`,
-    /* Soleil haut : soleil entier, rayons tout autour */
+    /* High sun: full sun, rays all around */
     noon: () => `
       <rect width="64" height="64" rx="18" fill="#FFF8DB"/>
       ${rays(32, 30, 15, 21, 8, '#C98A0C')}
       <circle cx="32" cy="30" r="11" fill="#F5C842" stroke="${INK}" stroke-width="2.5"/>
       <line x1="14" y1="54" x2="50" y2="54" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>`,
-    /* Soleil couchant : demi-soleil orange, ciel du soir, flèche vers le bas */
+    /* Sunset: orange half sun, evening sky, arrow pointing down */
     evening: () => `
       <rect width="64" height="64" rx="18" fill="#FCE3D3"/>
       <path d="M20 40a12 12 0 0 1 24 0z" fill="#E0703A" stroke="${INK}" stroke-width="2.5"/>
       <line x1="10" y1="40" x2="54" y2="40" stroke="${INK}" stroke-width="3" stroke-linecap="round"/>
       <line x1="18" y1="46" x2="46" y2="46" stroke="${INK}" stroke-width="2.5" stroke-linecap="round" opacity=".5"/>
       <path d="M32 12v8m-4-4 4 4 4-4" fill="none" stroke="${INK}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>`,
-    /* Nuit : lune et étoiles sur fond sombre */
+    /* Night: moon and stars on a dark background */
     night: () => `
       <rect width="64" height="64" rx="18" fill="#2E3A7A"/>
       <path d="M40 45.5A16 16 0 1 1 32.5 16 12.5 12.5 0 0 0 40 45.5z" fill="#F5E6B8"/>
@@ -273,7 +276,7 @@
     return `<svg class="moment-icon" viewBox="0 0 64 64" width="${size}" height="${size}" aria-hidden="true" focusable="false">${art}</svg>`;
   };
 
-  /* ---------- Séquence repas : l'ordre des images dit « avant » ou « après » ---------- */
+  /* ---------- Meal sequence: the order of the pictures says “before” or “after” ---------- */
   const PLATE = `<svg viewBox="0 0 48 48" aria-hidden="true" focusable="false">
       <circle cx="24" cy="26" r="15" fill="#fff" stroke="${INK}" stroke-width="2.5"/>
       <circle cx="24" cy="26" r="9" fill="none" stroke="${INK}" stroke-width="1.5" opacity=".4"/>
@@ -297,7 +300,7 @@
     return `<span class="meal-seq${seq ? '' : ' no-seq'}">${seq ? `<span class="seq" aria-hidden="true">${seq}</span>` : ''}<span>${label}</span></span>`;
   };
 
-  /* ---------- Icônes d'interface ---------- */
+  /* ---------- Interface icons ---------- */
   Dose.ICON = {
     speaker: `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>`,
     check: `<svg class="check" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
@@ -310,15 +313,15 @@
   Dose.ICON.phone = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6.6 10.8a15 15 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z" fill="currentColor"/></svg>`;
   Dose.ICON.play = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>`;
 
-  /* ---------- Langues parlées par le patient ---------- */
-  /* Les langues de l'interface ouvrent l'écran du patient dans sa langue ;
-     les langues locales sont portées par le message vocal du pharmacien. */
+  /* ---------- Languages spoken by the patient ---------- */
+  /* Interface languages open the patient's screen in their language;
+     local languages are carried by the pharmacist's voice message. */
   Dose.LANGS = {
     fr: 'Français', en: 'English', es: 'Español', pt: 'Português', it: 'Italiano',
     fon: 'Fɔngbè', yo: 'Yorùbá', gen: 'Gɛn (mina)', ddn: 'Dendi', bba: 'Baatɔnum', adj: 'Ajagbe'
   };
 
-  /* ---------- Ordonnance dans le lien : JSON → UTF-8 → base64url ---------- */
+  /* ---------- Prescription inside the link: JSON → UTF-8 → base64url ---------- */
   Dose.encode = function (obj) {
     const bytes = new TextEncoder().encode(JSON.stringify(obj));
     let bin = '';
@@ -333,7 +336,7 @@
   };
   Dose.newId = () => Math.random().toString(36).slice(2, 10);
 
-  /* ---------- Dates (en jours locaux, format AAAA-MM-JJ) ---------- */
+  /* ---------- Dates (local days, YYYY-MM-DD) ---------- */
   const pad = (n) => String(n).padStart(2, '0');
   Dose.isoDate = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
   Dose.today = () => Dose.isoDate(new Date());
@@ -343,7 +346,7 @@
   Dose.formatDate = (iso, opts) => Dose.parseDate(iso).toLocaleDateString(
     Dose.locale(), opts || { weekday: 'long', day: 'numeric', month: 'long' });
 
-  /* ---------- Voix (synthèse vocale du navigateur) ---------- */
+  /* ---------- Voice (browser text-to-speech) ---------- */
   Dose.canSpeak = 'speechSynthesis' in window && 'SpeechSynthesisUtterance' in window;
   let speakingBtn = null;
   Dose.stopSpeaking = function () {
@@ -351,7 +354,7 @@
     if (speakingBtn) speakingBtn.setAttribute('aria-pressed', 'false');
     speakingBtn = null;
   };
-  /* Lit le texte ; un second clic sur le même bouton arrête la lecture. */
+  /* Reads the text aloud; a second click on the same button stops it. */
   Dose.speak = function (text, btn) {
     if (!Dose.canSpeak) return;
     const same = btn && btn === speakingBtn;
@@ -365,13 +368,13 @@
     window.speechSynthesis.speak(u);
   };
 
-  /* « de Paracétamol » / « d'Amoxicilline » */
+  /* French elision: « de Paracétamol » / « d'Amoxicilline » */
   Dose.de = (name) => (lang === 'fr' ? (/^[aeiouyhéèêàâîôû]/i.test(name) ? "d'" : 'de ') : '');
 
-  /* ---------- Préférences communes (langue, texte agrandi) ---------- */
+  /* ---------- Shared preferences (language, larger text) ---------- */
   Dose.initChrome = function () {
     if (Dose.store.get('dose:bigtext', false)) document.documentElement.classList.add('big-text');
-    /* ?lang=es dans l'adresse : affiche la page dans cette langue sans changer la préférence enregistrée */
+    /* ?lang=es in the URL shows the page in that language without changing the saved preference */
     const forced = new URLSearchParams(location.search).get('lang');
     if (forced && Dose.UI_LANGS[forced] && STR[forced]) lang = forced;
     if (!Dose.UI_LANGS[lang] || !STR[lang]) lang = 'fr';

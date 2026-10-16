@@ -1,17 +1,17 @@
 /* =========================================================
-   Dose — catalogue de médicaments et fiches patient
-   ⚠️ Contenu indicatif rédigé pour le prototype, d'après les notices
-   et les recommandations générales de l'OMS. À faire valider par un
-   pharmacien avant tout usage réel.
-   Les couleurs et formes sont représentatives : le pharmacien les
-   ajuste à la boîte réellement délivrée.
+   Dose: medicine catalogue and patient sheets
+   ⚠️ Indicative content written for the prototype, based on package
+   leaflets and general WHO guidance. Must be validated by a
+   pharmacist before any real use.
+   Colours and forms are representative: the pharmacist adjusts them
+   to the box actually dispensed.
    ========================================================= */
 (function () {
   'use strict';
   const Dose = window.Dose;
 
-  /* k : clé · n : nom · s : dosage · f : forme · c/c2 : couleurs · q : quantité par prise
-     t : moments · r : repas · j : durée en jours · prn : si besoin · max : prises max par jour */
+  /* k: key · n: name · s: strength · f: form · c/c2: colours · q: amount per dose
+     t: times of day · r: meal · j: duration in days · prn: only if needed · max: max doses per day */
   Dose.CATALOG = [
     { k: 'al', n: 'Artéméther-Luméfantrine', s: '20/120 mg', f: 'round', c: 'yellow', q: 4, t: ['morning', 'evening'], r: 'with', j: 3 },
     { k: 'para', n: 'Paracétamol', s: '500 mg', f: 'round', c: 'white', q: 2, t: [], r: 'any', j: 5, prn: true, max: 3 },
@@ -28,9 +28,9 @@
 
   Dose.catalogItem = (k) => Dose.CATALOG.find((m) => m.k === k);
 
-  /* Fiches : for (pour quoi) · use (à quoi il sert) · how (bien le prendre)
-     ok (ce qui peut arriver, sans danger) · alert (quand revenir) · avoid (à éviter)
-     3 éléments maximum par bloc. */
+  /* Sheets: for (what for) · use (what it does) · how (how to take it well)
+     ok (what may happen, harmlessly) · alert (when to come back) · avoid (what to avoid)
+     3 items maximum per block. */
   Dose.FICHES = {
     al: {
       fr: {
@@ -214,7 +214,7 @@
     }
   };
 
-  /* Fiche d'un médicament prescrit, dans la langue courante (null si masquée ou inconnue) */
+  /* Sheet of a prescribed medicine, in the current language (null if hidden or unknown) */
   Dose.ficheFor = function (med) {
     if (med.fi === 0) return null;
     const item = Dose.catalogItem(med.k);
@@ -260,8 +260,8 @@
     }
   });
 
-  /* Nom affiché dans la langue courante, si le pharmacien a gardé le nom du catalogue
-     (quelle que soit la langue dans laquelle il a été saisi). Un nom modifié reste tel quel. */
+  /* Name shown in the current language, if the pharmacist kept the catalogue name
+     (whatever language it was entered in). An edited name is kept as is. */
   Dose.medName = function (m) {
     if (!m.k || !Dose.catalogItem(m.k)) return m.n;
     const key = 'med.' + m.k;
@@ -277,7 +277,7 @@
     return Object.assign({}, rx, { m: rx.m.map((m) => Object.assign({}, m, { n: Dose.medName(m) })) });
   };
 
-  /* Ordonnance d'exemple : paludisme, commencée hier (on est au jour 2) */
+  /* Sample prescription: malaria, started yesterday (today is day 2) */
   Dose.demo = function () {
     const t = Dose.t;
     return {

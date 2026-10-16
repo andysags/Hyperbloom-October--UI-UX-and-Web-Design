@@ -1,8 +1,9 @@
 /* =========================================================
-   Dose — vue patient
-   L'ordonnance arrive dans le lien (#d=…). Sans lien : ordonnance d'exemple.
-   ?embed  : aperçu intégré dans la vue pharmacien (mise à jour par postMessage)
-   ?h=19   : simule l'heure (utile pour la démo et la vidéo)
+   Dose: patient view
+   The prescription arrives in the link (#d=…). No link: sample prescription.
+   ?embed  : preview embedded in the pharmacist view (updated by postMessage)
+   ?h=19   : simulates the hour (useful for demos and the video)
+   ?print  : opens the print dialog with the paper sheet
    ========================================================= */
 (function () {
   'use strict';
@@ -128,7 +129,7 @@
   let mode = 'ok'; // ok | demo | invalid | empty
   let taken = {};
 
-  /* ---------- Chargement ---------- */
+  /* ---------- Loading ---------- */
   function loadFromHash() {
     const m = location.hash.match(/[#&]d=([^&]+)/);
     rx = null;
@@ -151,7 +152,7 @@
 
   function audioNote() { return rx && rx.id ? D.store.get('dose:audio:' + rx.id, null) : null; }
 
-  /* ---------- Calcul de la journée ---------- */
+  /* ---------- Today's plan ---------- */
   function currentIdx() {
     const forced = parseInt(params.get('h'), 10);
     const h = Number.isNaN(forced) ? new Date().getHours() : forced;
@@ -179,7 +180,7 @@
     };
   }
 
-  /* ---------- Textes lus à voix haute ---------- */
+  /* ---------- Texts read aloud ---------- */
   const qtyText = (m) => `${m.q} ${D.unit(m.f, m.q)}`;
   const sayDose = (m) => [
     t('say.take', { q: m.q, unit: D.unit(m.f, m.q), de: D.de(m.n), name: m.n }),
@@ -190,7 +191,7 @@
   const sayPrn = (m) => t('say.prn', { q: m.q, unit: D.unit(m.f, m.q), de: D.de(m.n), name: m.n, max: m.max || 3 }) +
     (m.note ? ' ' + m.note : '');
 
-  /* ---------- Rendu ---------- */
+  /* ---------- Rendering ---------- */
   function render() {
     rx = D.localizeRx(rx);
     const focusKey = document.activeElement && document.activeElement.dataset && document.activeElement.dataset.key;
@@ -213,10 +214,10 @@
     let html = '';
 
     if (mode === 'demo' && !EMBED) {
-      html += `<p class="demo-banner"><span>${esc(t('p.demo'))}</span> <a href="pharmacien.html">${esc(t('p.demoCta'))}</a></p>`;
+      html += `<p class="demo-banner"><span>${esc(t('p.demo'))}</span> <a href="pharmacist.html">${esc(t('p.demoCta'))}</a></p>`;
     }
 
-    /* Bonjour */
+    /* Greeting */
     const dayClamped = Math.min(Math.max(P.dayN, 0), P.totalDays);
     html += `
       <section class="hello" aria-labelledby="hello-title">
@@ -235,7 +236,7 @@
         </div>
       </section>`;
 
-    /* Où en suis-je ? */
+    /* Where am I? */
     html += '<div class="status-stack">';
     if (P.dayN < 1) {
       html += status('info', t('p.startsOn', { date: D.formatDate(rx.d) }));
@@ -265,7 +266,7 @@
     }
     html += '</div>';
 
-    /* Les moments de la journée */
+    /* Times of day */
     P.moments.forEach((mo) => {
       const isNext = P.next && P.next.id === mo.id;
       html += `
@@ -285,7 +286,7 @@
         </section>`;
     });
 
-    /* Si besoin */
+    /* Only if needed */
     if (P.prn.length) {
       html += `
         <section class="moment moment-prn" aria-labelledby="h-prn">
@@ -297,7 +298,7 @@
         </section>`;
     }
 
-    /* Appeler la pharmacie */
+    /* Call the pharmacy */
     if (rx.ph && rx.ph.t) {
       html += `<a class="call-card" href="tel:${esc(rx.ph.t.replace(/[^\d+]/g, ''))}">${D.ICON.phone}<span><strong>${esc(t('p.call'))}</strong><br>${esc(rx.ph.n || '')} · ${esc(rx.ph.t)}</span></a>`;
     }
@@ -380,7 +381,7 @@
       </li>`;
   }
 
-  /* ---------- Feuille papier ---------- */
+  /* ---------- Paper sheet ---------- */
   const PRINTER = `<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M7 3h10v5H7zM5 9h14a2 2 0 0 1 2 2v6h-4v4H7v-4H3v-6a2 2 0 0 1 2-2zm4 8v2h6v-4H9z" fill="currentColor"/></svg>`;
   const MAX_PRINT_DAYS = 14;
 
@@ -453,7 +454,7 @@
       </section>` : ''}`;
   }
 
-  /* ---------- Fiche médicament ---------- */
+  /* ---------- Medicine sheet ---------- */
   let ficheReturnFocus = null;
   function openFiche(i) {
     const m = rx.m[i];
@@ -486,7 +487,7 @@
     dialog.showModal();
   }
   dialog.addEventListener('click', (e) => {
-    if (e.target === dialog) { dialog.close(); return; } /* clic sur le fond */
+    if (e.target === dialog) { dialog.close(); return; } /* click on the backdrop */
     const b = e.target.closest('[data-action]');
     if (!b) return;
     if (b.dataset.action === 'close') dialog.close();
@@ -545,7 +546,7 @@
     setTimeout(() => { live.textContent = msg; }, 50);
   }
 
-  /* ---------- Démarrage ---------- */
+  /* ---------- Start ---------- */
   document.addEventListener('dose:lang', () => {
     D.stopSpeaking();
     if (mode === 'demo') rx = D.demo();
@@ -554,7 +555,7 @@
   });
   window.addEventListener('hashchange', () => { loadFromHash(); render(); });
 
-  /* Aperçu en direct depuis la vue pharmacien */
+  /* Live preview from the pharmacist view */
   window.addEventListener('message', (e) => {
     if (e.origin !== location.origin && location.origin !== 'null') return;
     const d = e.data;
@@ -562,14 +563,14 @@
     rx = d.rx;
     mode = rx && rx.m && rx.m.length ? 'ok' : 'empty';
     loadTaken();
-    /* L'aperçu montre l'écran dans la langue du patient quand l'interface la parle */
+    /* The preview shows the screen in the patient's language when the interface speaks it */
     const l = rx && rx.p && D.UI_LANGS[rx.p.l] ? rx.p.l : d.lang;
     if (l && l !== D.lang()) D.setLang(l, { persist: false }); else render();
   });
 
   D.initChrome();
   loadFromHash();
-  /* Première ouverture : l'écran s'affiche dans la langue du patient si l'interface la parle */
+  /* First opening: the screen uses the patient's language if the interface speaks it */
   if (mode === 'ok' && !EMBED && rx.p && D.UI_LANGS[rx.p.l] && !D.store.get('dose:langset:' + rx.id, false)) {
     D.store.set('dose:langset:' + rx.id, true);
     if (rx.p.l !== D.lang()) D.setLang(rx.p.l);

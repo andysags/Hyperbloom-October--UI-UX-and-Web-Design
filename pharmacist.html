@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dose · New prescription</title>
+  <meta name="description" content="Turn a prescription into a visual, spoken calendar in under a minute.">
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/dose.css">
+</head>
+<body class="pharma">
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
+  <div class="kente" aria-hidden="true"></div>
+  <header class="site-header">
+    <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span> <span class="brand-tag" data-i18n="ph.tag">Pharmacy</span></a>
+    <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
+      <label class="lang-select">
+        <span class="sr-only" data-i18n="a11y.lang">Language</span>
+        <span class="lang-globe" data-globe aria-hidden="true"></span>
+        <select data-lang-select></select>
+      </label>
+      <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
+        <span aria-hidden="true">Aa</span> <span class="hide-sm" data-i18n="a11y.bigtext">Larger text</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="main" class="pharma-layout" tabindex="-1">
+    <div class="pharma-form">
+      <div class="page-head">
+        <div>
+          <h1 data-i18n="ph.title">New prescription</h1>
+          <p class="lead" data-i18n="ph.intro"></p>
+        </div>
+        <div class="page-head-actions">
+          <button type="button" class="btn btn-secondary" id="fill-example" data-i18n="ph.example">Fill with an example</button>
+          <button type="button" class="btn btn-ghost" id="reset" data-i18n="ph.reset">Clear all</button>
+        </div>
+      </div>
+
+      <div id="errors" class="error-summary" role="alert" tabindex="-1" hidden></div>
+
+      <form id="rx-form" novalidate>
+        <!-- 1. Patient -->
+        <section class="card form-section" aria-labelledby="s-patient">
+          <h2 id="s-patient"><span class="step-num" aria-hidden="true">1</span><span data-i18n="ph.patient">Patient</span></h2>
+          <div class="grid2">
+            <div class="field">
+              <label for="p-name" data-i18n="ph.patientName">First name or nickname</label>
+              <input id="p-name" name="p-name" autocomplete="off" maxlength="40" required aria-describedby="p-name-err">
+              <p class="field-error" id="p-name-err" hidden></p>
+            </div>
+            <div class="field">
+              <label for="p-lang" data-i18n="ph.patientLang">Language spoken</label>
+              <select id="p-lang" name="p-lang"></select>
+            </div>
+          </div>
+          <p class="hint hint-voice" id="lang-hint" hidden></p>
+        </section>
+
+        <!-- 2. Pharmacy -->
+        <section class="card form-section" aria-labelledby="s-pharmacy">
+          <h2 id="s-pharmacy"><span class="step-num" aria-hidden="true">2</span><span data-i18n="ph.pharmacy">Your pharmacy</span></h2>
+          <div class="grid3">
+            <div class="field">
+              <label for="ph-name" data-i18n="ph.pharmacyName">Pharmacy name</label>
+              <input id="ph-name" name="ph-name" autocomplete="organization" maxlength="60">
+            </div>
+            <div class="field">
+              <label for="ph-tel" data-i18n="ph.pharmacyTel">Phone (optional)</label>
+              <input id="ph-tel" name="ph-tel" type="tel" autocomplete="tel" maxlength="24" inputmode="tel">
+            </div>
+            <div class="field">
+              <label for="rx-start" data-i18n="ph.start">Treatment start</label>
+              <input id="rx-start" name="rx-start" type="date">
+            </div>
+          </div>
+          <p class="hint" data-i18n="ph.remember"></p>
+        </section>
+
+        <!-- 3. Medicines -->
+        <section class="card form-section" aria-labelledby="s-meds">
+          <h2 id="s-meds"><span class="step-num" aria-hidden="true">3</span><span data-i18n="ph.meds">Medicines</span></h2>
+          <div class="add-row">
+            <div class="field add-field">
+              <label for="med-search" data-i18n="ph.addLabel">Search or type a medicine</label>
+              <input id="med-search" list="catalog-list" autocomplete="off" maxlength="60">
+              <datalist id="catalog-list"></datalist>
+            </div>
+            <button type="button" class="btn btn-primary" id="add-med" data-i18n="ph.add">Add</button>
+          </div>
+          <div class="quick" role="group" aria-labelledby="quick-label">
+            <span id="quick-label" class="quick-label" data-i18n="ph.quick">Frequent:</span>
+            <div class="quick-list" id="quick-list"></div>
+          </div>
+          <p class="empty-meds" id="no-meds" data-i18n="ph.noMeds"></p>
+          <ol class="med-list" id="med-list"></ol>
+        </section>
+
+        <!-- 4. Voice message -->
+        <section class="card form-section" aria-labelledby="s-voice">
+          <h2 id="s-voice"><span class="step-num" aria-hidden="true">4</span><span data-i18n="ph.voice">Voice message</span> <span class="optional" data-i18n="ph.optional">optional</span></h2>
+          <p class="hint" data-i18n="ph.voiceHint"></p>
+          <div class="voice" id="voice"></div>
+          <p class="hint hint-small" data-i18n="ph.recNote"></p>
+        </section>
+
+        <div class="generate-row">
+          <button type="submit" class="btn btn-primary btn-lg" id="generate" data-i18n="ph.generate">Create patient prescription</button>
+          <p class="hint" data-i18n="ph.privacy"></p>
+        </div>
+      </form>
+
+      <!-- 5. Hand-off to the patient -->
+      <section class="card result" id="result" aria-labelledby="result-title" tabindex="-1" hidden></section>
+    </div>
+
+    <aside class="preview" id="preview" aria-labelledby="preview-title">
+      <div class="preview-head">
+        <h2 id="preview-title" data-i18n="ph.preview">Patient preview</h2>
+        <button type="button" class="icon-btn preview-close" id="preview-close" data-i18n-attr="aria-label:ph.previewClose"></button>
+      </div>
+      <div class="phone">
+        <iframe id="preview-frame" src="patient.html?embed" data-i18n-attr="title:ph.previewFrame"></iframe>
+      </div>
+    </aside>
+    <button type="button" class="btn btn-primary preview-fab" id="preview-open" aria-controls="preview" data-i18n="ph.previewOpen">See preview</button>
+  </main>
+
+  <div class="sr-only" aria-live="polite" id="live"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script src="assets/js/core.js"></script>
+  <script src="assets/js/catalog.js"></script>
+  <script src="assets/js/lang-es.js"></script>
+  <script src="assets/js/lang-pt.js"></script>
+  <script src="assets/js/lang-it.js"></script>
+  <script src="assets/js/pharmacist.js"></script>
+</body>
+</html>

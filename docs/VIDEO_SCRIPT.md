@@ -18,7 +18,7 @@
 | Scene | URL |
 |---|---|
 | Home | `/?lang=en` |
-| Pharmacist | `/pharmacien.html?lang=en` |
+| Pharmacist | `/pharmacist.html?lang=en` |
 | Patient at 7 pm | `/patient.html?lang=en&h=19` |
 | Patient in Spanish | `/patient.html?lang=es&h=19` |
 

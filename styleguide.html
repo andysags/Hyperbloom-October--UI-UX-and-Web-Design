@@ -1,10 +1,10 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Dose · Guide de style</title>
-  <meta name="description" content="Couleurs, typographie, dessins des médicaments et pictogrammes de Dose.">
+  <title>Dose · Style guide</title>
+  <meta name="description" content="Dose colours, typography, medicine drawings and pictograms.">
   <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,92 +12,92 @@
   <link rel="stylesheet" href="assets/css/dose.css">
 </head>
 <body class="sg">
-  <a class="skip-link" href="#main" data-i18n="a11y.skip">Aller au contenu</a>
+  <a class="skip-link" href="#main" data-i18n="a11y.skip">Skip to content</a>
   <div class="kente" aria-hidden="true"></div>
   <header class="site-header">
     <a class="brand" href="index.html" data-i18n-attr="aria-label:a11y.home"><span data-logo></span><span>Dose</span></a>
     <div class="header-tools" role="group" data-i18n-attr="aria-label:a11y.prefs">
       <label class="lang-select">
-        <span class="sr-only" data-i18n="a11y.lang">Langue</span>
+        <span class="sr-only" data-i18n="a11y.lang">Language</span>
         <span class="lang-globe" data-globe aria-hidden="true"></span>
         <select data-lang-select></select>
       </label>
       <button type="button" class="btn btn-ghost" data-action="bigtext" aria-pressed="false">
-        <span aria-hidden="true">Aa</span> <span data-i18n="a11y.bigtext">Texte agrandi</span>
+        <span aria-hidden="true">Aa</span> <span data-i18n="a11y.bigtext">Larger text</span>
       </button>
     </div>
   </header>
 
   <main id="main">
-    <h1>Guide de style</h1>
-    <p class="lead">Les fondations visuelles de Dose. Chaque choix sert une personne qui lit peu ou mal, qui voit mal, ou qui utilise un petit téléphone en plein soleil.</p>
+    <h1>Style guide</h1>
+    <p class="lead">The visual foundations of Dose. Every choice serves someone who reads little or not at all, who has poor eyesight, or who uses a small phone in bright sunlight.</p>
 
     <section aria-labelledby="sg-colors">
-      <h2 id="sg-colors">Couleurs</h2>
-      <p class="section-intro">Un fond crème, moins éblouissant que le blanc pur, et un indigo profond pour l'action. Les couleurs des moments ne servent qu'au décor : elles ne portent jamais de texte et ne sont jamais la seule information. Les ratios de contraste sont calculés en direct.</p>
+      <h2 id="sg-colors">Colours</h2>
+      <p class="section-intro">A cream background, with less glare than pure white, and a deep indigo for actions. The time-of-day colours are decoration only: they never carry text and are never the only information. Contrast ratios are computed live.</p>
       <div class="sg-grid" id="swatches"></div>
     </section>
 
     <section aria-labelledby="sg-type" class="type-specimen">
-      <h2 id="sg-type">Typographie</h2>
-      <p class="section-intro">Atkinson Hyperlegible, créée par le Braille Institute pour les personnes malvoyantes. Les lettres qui se ressemblent (I, l, 1 · 0, O · b, d) ont des formes bien distinctes. Taille de base : 17 px, 21 px en mode texte agrandi.</p>
+      <h2 id="sg-type">Typography</h2>
+      <p class="section-intro">Atkinson Hyperlegible, designed by the Braille Institute for low-vision readers. Look-alike characters (I, l, 1 · 0, O · b, d) have clearly distinct shapes. Base size: 17 px, 21 px in larger-text mode.</p>
       <div class="card">
-        <p class="label">Titre 1 · 52 px gras</p>
-        <p style="font-size:3.25rem;font-weight:700;line-height:1.1;letter-spacing:-.02em">Bonjour Afi</p>
-        <p class="label">Titre 2 · 32 px gras</p>
-        <p style="font-size:2rem;font-weight:700;line-height:1.2">Soir · vers 19 h</p>
-        <p class="label">Quantité · 22 px gras</p>
-        <p style="font-size:1.375rem;font-weight:700">4 comprimés</p>
-        <p class="label">Texte · 17 px</p>
-        <p>Prenez-les avec un repas ou du lait. Continuez même si la fièvre disparaît.</p>
-        <p class="label">Caractères ambigus</p>
+        <p class="label">Heading 1 · 52 px bold</p>
+        <p style="font-size:3.25rem;font-weight:700;line-height:1.1;letter-spacing:-.02em">Hello Afi</p>
+        <p class="label">Heading 2 · 32 px bold</p>
+        <p style="font-size:2rem;font-weight:700;line-height:1.2">Evening · around 7 pm</p>
+        <p class="label">Quantity · 22 px bold</p>
+        <p style="font-size:1.375rem;font-weight:700">4 tablets</p>
+        <p class="label">Body · 17 px</p>
+        <p>Take them with a meal or a glass of milk. Keep going even if the fever goes away.</p>
+        <p class="label">Look-alike characters</p>
         <p style="font-size:2rem;letter-spacing:.1em">Il1 O0 bd 5S 8B</p>
       </div>
     </section>
 
     <section aria-labelledby="sg-moments">
-      <h2 id="sg-moments">Moments de la journée</h2>
-      <p class="section-intro">Quatre moments repérables sans lire l'heure. Le matin et le soir se distinguent par la couleur du soleil, mais aussi par la flèche (le soleil monte ou descend) et par le fond.</p>
+      <h2 id="sg-moments">Times of day</h2>
+      <p class="section-intro">Four moments you can recognise without reading the time. Morning and evening differ by the colour of the sun, but also by the arrow (the sun rises or sets) and by the background.</p>
       <div class="sg-grid" id="moments"></div>
     </section>
 
     <section aria-labelledby="sg-pills">
-      <h2 id="sg-pills">Dessins des médicaments</h2>
-      <p class="section-intro">Le patient reconnaît le médicament qu'il a dans la main : même forme, même couleur. Un contour sombre garde le dessin visible même pour un comprimé blanc.</p>
-      <h3>Formes</h3>
+      <h2 id="sg-pills">Medicine drawings</h2>
+      <p class="section-intro">The patient recognises the medicine in their hand: same shape, same colour. A dark outline keeps the drawing visible, even for a white tablet.</p>
+      <h3>Forms</h3>
       <div class="sg-grid" id="forms"></div>
-      <h3 style="margin-top:2rem">Couleurs</h3>
+      <h3 style="margin-top:2rem">Colours</h3>
       <div class="sg-grid" id="colors"></div>
-      <h3 style="margin-top:2rem">Quantité dessinée</h3>
-      <p class="section-intro">4 comprimés, ce sont 4 dessins : on compte sans savoir lire les chiffres. Au-delà de 4, un seul dessin suivi de « × n » évite une rangée illisible.</p>
+      <h3 style="margin-top:2rem">Drawn quantity</h3>
+      <p class="section-intro">4 tablets means 4 drawings: you can count without reading numbers. Above 4, a single drawing followed by “× n” avoids an unreadable row.</p>
       <div class="sg-grid" id="quantities"></div>
     </section>
 
     <section aria-labelledby="sg-meals">
-      <h2 id="sg-meals">Repas</h2>
-      <p class="section-intro">L'ordre des images raconte la consigne : le médicament puis l'assiette, c'est « avant le repas ». Le texte reste toujours présent à côté.</p>
+      <h2 id="sg-meals">Meals</h2>
+      <p class="section-intro">The order of the pictures tells the instruction: pill then plate means “before eating”. The text label is always shown next to it.</p>
       <div class="stack" id="meals"></div>
     </section>
 
     <section aria-labelledby="sg-buttons">
-      <h2 id="sg-buttons">Boutons</h2>
-      <p class="section-intro">Toutes les cibles font au moins 48 px. Le bouton « J'ai pris » fait 60 px de haut : c'est l'action la plus fréquente de l'application. Son état change de couleur, de texte et d'icône à la fois.</p>
+      <h2 id="sg-buttons">Buttons</h2>
+      <p class="section-intro">Every target is at least 48 px. The “I took it” button is 60 px tall: it is the most frequent action in the app. Its state changes colour, text and icon together.</p>
       <div class="row" id="buttons"></div>
     </section>
 
     <section aria-labelledby="sg-assembled">
-      <h2 id="sg-assembled">Assemblage : une prise</h2>
-      <p class="section-intro">Tous les éléments réunis, tels qu'ils apparaîtront dans la vue patient. Les boutons fonctionnent.</p>
+      <h2 id="sg-assembled">Put together: one dose</h2>
+      <p class="section-intro">All the elements together, as they appear in the patient view. The buttons work.</p>
       <div class="card" id="assembled"></div>
     </section>
 
     <section aria-labelledby="sg-rules">
-      <h2 id="sg-rules">Règles</h2>
+      <h2 id="sg-rules">Rules</h2>
       <div class="do-dont">
-        <div class="tile"><span class="tag-do">✓ À faire</span><p>Toujours doubler la couleur par une forme, un dessin et un texte.</p></div>
-        <div class="tile"><span class="tag-dont">✕ À éviter</span><p>« Prenez le comprimé rouge » sans dessin : les daltoniens et les écrans abîmés perdent l'information.</p></div>
-        <div class="tile"><span class="tag-do">✓ À faire</span><p>Un moment, une consigne, une action. L'écran du jour ne montre que ce qui est utile aujourd'hui.</p></div>
-        <div class="tile"><span class="tag-dont">✕ À éviter</span><p>Les abréviations médicales (« cp », « x3/j », « pdt ») et le jargon.</p></div>
+        <div class="tile"><span class="tag-do">✓ Do</span><p>Always pair colour with a shape, a drawing and a text.</p></div>
+        <div class="tile"><span class="tag-dont">✕ Don't</span><p>“Take the red tablet” with no drawing: colour-blind people and damaged screens lose the information.</p></div>
+        <div class="tile"><span class="tag-do">✓ Do</span><p>One moment, one instruction, one action. Today's screen only shows what is useful today.</p></div>
+        <div class="tile"><span class="tag-dont">✕ Don't</span><p>Medical abbreviations (“tab”, “x3/d”, “w/ meals”) and jargon.</p></div>
       </div>
     </section>
   </main>
@@ -105,6 +105,7 @@
   <footer><p data-i18n="disclaimer"></p></footer>
 
   <script src="assets/js/core.js"></script>
+  <script src="assets/js/catalog.js"></script>
   <script src="assets/js/lang-es.js"></script>
   <script src="assets/js/lang-pt.js"></script>
   <script src="assets/js/lang-it.js"></script>
@@ -112,7 +113,7 @@
   (function () {
     const D = window.Dose, t = D.t, esc = D.esc;
 
-    /* Contraste WCAG */
+    /* WCAG contrast */
     const lum = (hex) => {
       const n = parseInt(hex.slice(1), 16);
       return [(n >> 16) & 255, (n >> 8) & 255, n & 255]
@@ -122,23 +123,23 @@
     const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((m, n) => n - m); return (x + 0.05) / (y + 0.05); };
 
     const SWATCHES = [
-      { name: 'Encre', token: '--ink', hex: '#1B1F3B', on: '#FBF6EE', role: 'Texte principal' },
-      { name: 'Encre 2', token: '--ink-2', hex: '#4A4F68', on: '#FBF6EE', role: 'Texte secondaire' },
-      { name: 'Indigo', token: '--primary', hex: '#2B3A8C', on: '#FFFFFF', role: 'Actions, liens' },
-      { name: 'Succès', token: '--success', hex: '#1D6B43', on: '#FFFFFF', role: 'Prise effectuée' },
-      { name: 'Terre cuite', token: '--accent', hex: '#B4441F', on: '#FFFFFF', role: 'Accent' },
-      { name: 'Alerte', token: '--danger', hex: '#A12622', on: '#FFFFFF', role: 'Signes d\'alerte' },
-      { name: 'Crème', token: '--bg', hex: '#FBF6EE', on: '#1B1F3B', role: 'Fond' },
-      { name: 'Soleil', token: '--morning', hex: '#F2B33D', on: '#1B1F3B', role: 'Décor : matin', deco: true },
-      { name: 'Couchant', token: '--evening', hex: '#E0703A', on: '#1B1F3B', role: 'Décor : soir', deco: true },
-      { name: 'Nuit', token: '--night', hex: '#2E3A7A', on: '#FFFFFF', role: 'Décor : nuit', deco: true }
+      { name: 'Ink', token: '--ink', hex: '#1B1F3B', on: '#FBF6EE', role: 'Main text' },
+      { name: 'Ink 2', token: '--ink-2', hex: '#4A4F68', on: '#FBF6EE', role: 'Secondary text' },
+      { name: 'Indigo', token: '--primary', hex: '#2B3A8C', on: '#FFFFFF', role: 'Actions, links' },
+      { name: 'Success', token: '--success', hex: '#1D6B43', on: '#FFFFFF', role: 'Dose taken' },
+      { name: 'Terracotta', token: '--accent', hex: '#B4441F', on: '#FFFFFF', role: 'Accent' },
+      { name: 'Alert', token: '--danger', hex: '#A12622', on: '#FFFFFF', role: 'Warning signs' },
+      { name: 'Cream', token: '--bg', hex: '#FBF6EE', on: '#1B1F3B', role: 'Background' },
+      { name: 'Sun', token: '--morning', hex: '#F2B33D', on: '#1B1F3B', role: 'Decoration: morning', deco: true },
+      { name: 'Sunset', token: '--evening', hex: '#E0703A', on: '#1B1F3B', role: 'Decoration: evening', deco: true },
+      { name: 'Night', token: '--night', hex: '#2E3A7A', on: '#FFFFFF', role: 'Decoration: night', deco: true }
     ];
 
     function render() {
       document.getElementById('swatches').innerHTML = SWATCHES.map((s) => {
         const r = ratio(s.hex, s.on);
-        const badge = s.deco ? '<span class="badge-aa badge-deco">décor</span>'
-          : `<span class="badge-aa">${r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : 'AA grand'}</span>`;
+        const badge = s.deco ? '<span class="badge-aa badge-deco">decoration</span>'
+          : `<span class="badge-aa">${r >= 7 ? 'AAA' : r >= 4.5 ? 'AA' : 'AA large'}</span>`;
         return `<div class="swatch">
           <div class="swatch-color" style="background:${s.hex};color:${s.on}">${r.toFixed(1)}:1</div>
           <div class="swatch-meta"><strong>${s.name}</strong> ${badge}<br><code>${s.token} ${s.hex}</code><br>${s.role}</div>
@@ -164,16 +165,16 @@
       document.getElementById('meals').innerHTML = D.MEALS.map((m) => `<div>${D.mealHTML(m, sample)}</div>`).join('');
 
       document.getElementById('buttons').innerHTML = `
-        <button type="button" class="btn btn-primary">Créer l'ordonnance</button>
-        <button type="button" class="btn btn-secondary">Voir l'exemple</button>
-        <button type="button" class="btn btn-ghost">Annuler</button>
+        <button type="button" class="btn btn-primary">Create prescription</button>
+        <button type="button" class="btn btn-secondary">See the example</button>
+        <button type="button" class="btn btn-ghost">Cancel</button>
         <button type="button" class="take" aria-pressed="false">${D.ICON.check}<span>${esc(t('take'))}</span></button>
         <button type="button" class="take" aria-pressed="true">${D.ICON.check}<span>${esc(t('taken'))}</span></button>
         <button type="button" class="listen" aria-label="${esc(t('listen'))}">${D.ICON.speaker}</button>`;
 
       const doses = [
-        { n: 'Artéméther-Luméfantrine', s: '20/120 mg', f: 'round', c: 'yellow', q: 4, r: 'after' },
-        { n: 'Fer + acide folique', s: '', f: 'round', c: 'red', q: 1, r: 'before' }
+        { k: 'al', n: t('med.al'), s: '20/120 mg', f: 'round', c: 'yellow', q: 4, r: 'after' },
+        { k: 'fer', n: t('med.fer'), s: '', f: 'round', c: 'red', q: 1, r: 'before' }
       ];
       document.getElementById('assembled').innerHTML = `
         <div class="moment-head">${D.momentSVG('morning', 64)}

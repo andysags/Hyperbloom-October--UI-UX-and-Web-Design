@@ -72,7 +72,7 @@ We had no time to run field interviews during the hackathon, so we based the des
 
 ### How we would validate them
 - A **5-second test** in a pharmacy: show one dose card with no explanation, then ask *“What do you have to do, and when?”*
-- Short interviews with a pharmacist, a patient and a caregiver. The guide is ready in [CADRAGE.md](CADRAGE.md), in French.
+- Short interviews with a pharmacist, a patient and a caregiver. The guide is ready in the [design brief](DESIGN_BRIEF.md).
 - Timing pharmacists filling in a real prescription.
 
 ---

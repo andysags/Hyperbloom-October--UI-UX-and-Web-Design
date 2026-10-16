@@ -1,31 +1,66 @@
 # Dose
 
-**L'ordonnance que tout le monde peut lire.**
+**The prescription everyone can read.**
 
-Le pharmacien traduit l'ordonnance en un calendrier visuel et parlé que le patient reçoit sur son téléphone, sur papier, ou les deux.
+When a medicine is dispensed, the pharmacist turns the prescription into a visual, spoken calendar that the patient receives on their phone, on paper, or both. Drawn pills you can count, sun and moon for the time of day, picture order for “before / after eating”, and the pharmacist's own voice in the patient's language.
 
-Projet pour le hackathon [HyperBloom October : UI/UX & Web Design](https://www.hyperbloomhacks.com/).
+Built for the [HyperBloom October: UI/UX & Web Design](https://www.hyperbloomhacks.com/) hackathon.
 
-🌐 **Démo en ligne :** https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/ (après activation de GitHub Pages)
+🌐 **Live prototype:** https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/
 
-- 📄 [Document de cadrage](docs/CADRAGE.md) : problème, utilisateurs, parcours, décisions, périmètre.
-- 📘 [Case study (EN)](docs/CASE_STUDY.md) · ✍️ [Texte Devpost (EN)](docs/DEVPOST.md) · 🎬 [Script vidéo](docs/VIDEO_SCRIPT.md) · 🖼️ [Galerie](docs/gallery/)
-- 🎨 [Guide de style](styleguide.html) : couleurs, typographie, dessins des médicaments, pictogrammes.
-- 🏠 [Accueil](index.html) : le problème, l'avant/après, le fonctionnement et les principes.
-- 🧑‍⚕️ [Vue pharmacien](pharmacien.html) : création de l'ordonnance, aperçu en direct, message vocal, QR code, WhatsApp et SMS.
-- 💊 [Vue patient](patient.html) : sans lien, elle affiche une ordonnance d'exemple (paludisme). Ajouter `?h=19` à l'adresse simule 19 h, pratique pour la démo. Le bouton « Imprimer ma feuille papier » produit un calendrier A4 avec des cases à cocher et, au dos, les fiches médicament.
+![Dose home page](docs/gallery/01-home.png)
 
-## Langues
+## Try it
 
-Interface en **français, anglais, espagnol, portugais et italien**, y compris la synthèse vocale, les fiches médicament et les noms des médicaments du catalogue. Les langues locales du Bénin (fon, yoruba, mina, dendi…) sont portées par le message vocal du pharmacien. Pour ajouter une langue, il suffit d'ajouter un fichier `assets/js/lang-xx.js`.
+| Page | What it shows |
+|---|---|
+| [Home](https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/?lang=en) | The problem, a before/after, how it works, design principles |
+| [Pharmacist view](https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/pharmacist.html?lang=en) | Create a prescription: one-tap frequent medicines, live patient preview, voice message, QR code, WhatsApp, SMS, print. Tip: click **Fill with an example** |
+| [Patient view](https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/patient.html?lang=en&h=19) | Today's doses, “I took it”, missed dose guidance, “only if needed” limit, medicine sheets, read aloud, paper sheet |
+| [Style guide](https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/styleguide.html?lang=en) | Colours with live contrast ratios, typography, pill drawings, pictograms |
 
-## Lancer en local
+URL options: `?lang=fr|en|es|pt|it` sets the language, `?h=19` simulates 7 pm on the patient view, `?print` opens the paper sheet.
 
-Aucune installation n'est nécessaire : c'est un site statique.
+## Documentation
+
+- 🎬 [Demo film](video/) · [storyboard](docs/VIDEO_SCRIPT.md)
+- 📘 [Case study](docs/CASE_STUDY.md): problem, research, decisions, accessibility, iterations, limits
+- 🧭 [Design brief](docs/DESIGN_BRIEF.md): users, flows, scope, decisions
+- ✍️ [Devpost submission text](docs/DEVPOST.md)
+- 🖼️ [Gallery](docs/gallery/)
+
+## Languages
+
+The interface speaks **French, English, Spanish, Portuguese and Italian**, including text-to-speech, medicine sheets and catalogue medicine names. It follows the browser language by default. Benin's local languages (Fon, Yoruba, Mina, Dendi…) are carried by the pharmacist's recorded voice message. To add a language, add one file: `assets/js/lang-xx.js`.
+
+## Accessibility
+
+Atkinson Hyperlegible typeface · WCAG AA contrast or better · never colour alone · 48 px touch targets · larger-text mode · keyboard and screen reader support · `prefers-reduced-motion` · lightweight pages · paper version.
+
+## Run locally
+
+No build step, no dependencies: it is a static site.
 
 ```bash
 python3 -m http.server 8000
-# puis ouvrir http://localhost:8000
+# then open http://localhost:8000
 ```
 
-> Prototype de hackathon. Dose ne remplace pas l'avis d'un médecin ou d'un pharmacien.
+## Project structure
+
+```
+index.html          Home page
+pharmacist.html     Pharmacist view
+patient.html        Patient view (+ printable sheet)
+styleguide.html     Style guide
+assets/css/         Design system
+assets/js/          Core, catalogue, views, translations (lang-*.js)
+docs/               Case study, design brief, Devpost text, storyboard, gallery
+video/              Demo film
+```
+
+## Privacy
+
+No account and no server: the prescription is encoded inside the link (JSON → base64url). In this prototype, voice messages stay on the device that recorded them.
+
+> Hackathon prototype. Dose does not replace advice from a doctor or pharmacist. Medical content is indicative and must be validated by a pharmacist.

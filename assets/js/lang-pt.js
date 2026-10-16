@@ -1,6 +1,6 @@
 /* =========================================================
-   Dose — traduction portugaise (português)
-   Fiches médicament : contenu indicatif, à faire valider par un pharmacien.
+   Dose: Portuguese translation (português)
+   Medicine sheets: indicative content, to be validated by a pharmacist.
    ========================================================= */
 (function () {
   'use strict';

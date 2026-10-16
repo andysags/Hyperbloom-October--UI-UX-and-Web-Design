@@ -1,6 +1,6 @@
 /* =========================================================
-   Dose — traduction espagnole (español)
-   Fiches médicament : contenu indicatif, à faire valider par un pharmacien.
+   Dose: Spanish translation (español)
+   Medicine sheets: indicative content, to be validated by a pharmacist.
    ========================================================= */
 (function () {
   'use strict';

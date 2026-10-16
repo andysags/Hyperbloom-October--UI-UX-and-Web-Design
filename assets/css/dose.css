@@ -1,43 +1,43 @@
 /* =========================================================
-   Dose — design system
-   Atkinson Hyperlegible · contrastes WCAG AA minimum
+   Dose: design system
+   Atkinson Hyperlegible · WCAG AA contrast or better
    ========================================================= */
 
 :root {
   /* Surfaces */
-  --bg: #FBF6EE;          /* crème, moins éblouissant que le blanc pur */
+  --bg: #FBF6EE;          /* cream, less glare than pure white */
   --surface: #FFFFFF;
   --surface-2: #F4ECDF;
   --line: #E3D8C6;
 
-  /* Texte */
-  --ink: #1B1F3B;         /* 14.9:1 sur --bg */
-  --ink-2: #4A4F68;       /* 7.3:1 sur --bg */
+  /* Text */
+  --ink: #1B1F3B;         /* 14.9:1 on --bg */
+  --ink-2: #4A4F68;       /* 7.3:1 on --bg */
 
-  /* Marque et états */
-  --primary: #2B3A8C;     /* indigo, 10:1 sur blanc */
+  /* Brand and states */
+  --primary: #2B3A8C;     /* indigo, 10:1 on white */
   --primary-hover: #222E70;
   --primary-soft: #E6E9F7;
-  --accent: #B4441F;      /* terre cuite, 5.5:1 sur blanc */
-  --success: #1D6B43;     /* 6.5:1 sur blanc */
+  --accent: #B4441F;      /* terracotta, 5.5:1 on white */
+  --success: #1D6B43;     /* 6.5:1 on white */
   --success-soft: #E2F2E8;
   --warn: #7A4300;
   --warn-soft: #FFF1D6;
   --danger: #A12622;
   --danger-soft: #FCE6E4;
 
-  /* Moments de la journée (décor uniquement, jamais porteurs de texte) */
+  /* Times of day (decoration only, never carry text) */
   --morning: #F2B33D;
   --noon: #F5C842;
   --evening: #E0703A;
   --night: #2E3A7A;
 
-  /* Forme */
+  /* Shape */
   --radius: 20px;
   --radius-sm: 12px;
   --radius-pill: 999px;
   --shadow: 0 1px 2px rgba(27, 31, 59, .06), 0 8px 24px rgba(27, 31, 59, .08);
-  --tap: 48px;            /* cible tactile minimale */
+  --tap: 48px;            /* minimum touch target */
 
   --font: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --hand: "Caveat", "Comic Sans MS", cursive;
@@ -91,7 +91,7 @@ img, svg { max-width: 100%; }
 
 .kente { height: 10px; background: var(--kente); }
 
-/* ---------- En-tête ---------- */
+/* ---------- Header ---------- */
 .site-header {
   display: flex; align-items: center; justify-content: space-between; gap: 1rem;
   padding: .75rem clamp(1rem, 4vw, 2.5rem);
@@ -104,7 +104,7 @@ img, svg { max-width: 100%; }
 .brand svg { width: 36px; height: 36px; }
 .header-tools { display: flex; align-items: center; gap: .5rem; flex-wrap: wrap; }
 
-/* ---------- Boutons ---------- */
+/* ---------- Buttons ---------- */
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
   min-height: var(--tap); padding: .7rem 1.4rem;
@@ -123,7 +123,7 @@ img, svg { max-width: 100%; }
 .btn-ghost[aria-pressed="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
 .btn-lg { min-height: 60px; font-size: 1.125rem; padding: .9rem 1.6rem; }
 
-/* Bouton « J'ai pris » */
+/* “I took it” button */
 .take {
   min-height: 60px; min-width: 9rem; padding: .7rem 1.2rem;
   font: inherit; font-weight: 700; font-size: 1.125rem;
@@ -135,7 +135,7 @@ img, svg { max-width: 100%; }
 .take[aria-pressed="true"] { background: var(--success); color: #fff; }
 .take .check { width: 1.4em; height: 1.4em; }
 
-/* Bouton écouter */
+/* Listen button */
 .listen {
   width: var(--tap); height: var(--tap); flex: none;
   display: inline-grid; place-items: center;
@@ -145,7 +145,7 @@ img, svg { max-width: 100%; }
 .listen svg { width: 24px; height: 24px; }
 .listen[aria-pressed="true"] { background: var(--primary); color: #fff; }
 
-/* Sélecteur de langue */
+/* Language picker */
 .lang-select {
   position: relative; display: inline-flex; align-items: center;
   border: 2px solid var(--line); border-radius: var(--radius-pill); background: var(--surface);
@@ -162,7 +162,7 @@ img, svg { max-width: 100%; }
 .lang-select select:focus-visible { outline: none; box-shadow: none; }
 .hint-voice.hint-info { background: var(--primary-soft); color: var(--primary); }
 
-/* Segmenté */
+/* Segmented control */
 .segmented { display: inline-flex; border: 2px solid var(--line); border-radius: var(--radius-pill); padding: 2px; }
 .segmented button {
   min-height: 40px; min-width: 44px; padding: 0 .8rem; font: inherit; font-weight: 700;
@@ -170,13 +170,13 @@ img, svg { max-width: 100%; }
 }
 .segmented button[aria-pressed="true"] { background: var(--ink); color: #fff; }
 
-/* ---------- Cartes ---------- */
+/* ---------- Cards ---------- */
 .card {
   background: var(--surface); border: 1px solid var(--line);
   border-radius: var(--radius); box-shadow: var(--shadow); padding: 1.25rem;
 }
 
-/* ---------- Pictogrammes ---------- */
+/* ---------- Pictograms ---------- */
 .pill { display: block; flex: none; }
 .pill-row { display: flex; flex-wrap: wrap; align-items: center; gap: .15rem; }
 .pill-count {
@@ -198,7 +198,7 @@ img, svg { max-width: 100%; }
 .meal-seq .seq { flex: none; }
 .meal-seq .arrow { width: 18px !important; height: 18px !important; color: var(--ink-2); }
 
-/* Carte de prise (aperçu des composants) */
+/* Dose card (component preview) */
 .dose {
   display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem;
   padding: 1rem; border-radius: var(--radius-sm); background: var(--surface);
@@ -221,13 +221,13 @@ img, svg { max-width: 100%; }
 .moment-head p { margin: 0; color: var(--ink-2); }
 .moment-head .listen { margin-left: auto; }
 
-/* ---------- Mouvement ---------- */
+/* ---------- Motion ---------- */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
 }
 
 /* =========================================================
-   Guide de style
+   Style guide
    ========================================================= */
 .sg main { max-width: 1100px; margin: 0 auto; padding: 2rem clamp(1rem, 4vw, 2.5rem) 4rem; }
 .sg section { margin-top: 3rem; }
@@ -256,7 +256,7 @@ img, svg { max-width: 100%; }
 .sg footer { text-align: center; color: var(--ink-2); padding: 2rem 1rem; border-top: 1px solid var(--line); }
 
 /* =========================================================
-   Vue patient
+   Patient view
    ========================================================= */
 .patient main { max-width: 680px; margin: 0 auto; padding: 1.25rem 1rem 3rem; }
 .patient main:focus { outline: none; }
@@ -277,7 +277,7 @@ img, svg { max-width: 100%; }
   padding: .6rem 1rem; font-weight: 700; margin-bottom: 1.25rem;
 }
 
-/* Bonjour */
+/* Greeting */
 .hello { margin-bottom: 1.25rem; }
 .hello-date { color: var(--ink-2); margin: 0 0 .25rem; }
 .hello-date::first-letter { text-transform: uppercase; }
@@ -290,7 +290,7 @@ img, svg { max-width: 100%; }
 .hello-actions { display: flex; flex-wrap: wrap; gap: .75rem; }
 .hello-actions .btn { flex: 1 1 240px; }
 
-/* Statut du moment */
+/* Current status */
 .status-stack { display: grid; gap: .75rem; margin-bottom: 1.5rem; }
 .status {
   display: flex; gap: 1rem; align-items: flex-start;
@@ -314,7 +314,7 @@ img, svg { max-width: 100%; }
 }
 @keyframes pop { 0% { transform: scale(.4); } 70% { transform: scale(1.15); } 100% { transform: scale(1); } }
 
-/* Moments */
+/* Times of day */
 .moment {
   background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius);
   box-shadow: var(--shadow); padding: 1.1rem; margin-bottom: 1.25rem;
@@ -361,7 +361,7 @@ img, svg { max-width: 100%; }
 }
 .info-btn svg { width: 22px; height: 22px; flex: none; }
 
-/* Si besoin */
+/* Only if needed */
 .prn-actions { display: grid; gap: .5rem; }
 .prn-count { display: flex; align-items: center; gap: .6rem; font-weight: 700; margin: 0 0 .5rem; }
 .dots { display: inline-flex; gap: .3rem; }
@@ -380,7 +380,7 @@ img, svg { max-width: 100%; }
 
 .patient-footer { max-width: 680px; margin: 0 auto; padding: 1.5rem 1rem 2.5rem; color: var(--ink-2); font-size: .9rem; text-align: center; }
 
-/* Fiche médicament (boîte de dialogue) */
+/* Medicine sheet (dialog) */
 .sheet {
   width: min(640px, calc(100% - 1.5rem)); max-height: calc(100% - 1.5rem);
   border: 0; border-radius: var(--radius); padding: 1.25rem; color: var(--ink); background: var(--bg);
@@ -403,13 +403,13 @@ img, svg { max-width: 100%; }
 .fiche-how { background: var(--success-soft); border-color: #B9DCC6; }
 .sheet-source { margin: 1rem 0 0; font-size: .9rem; color: var(--ink-2); }
 
-/* Aperçu intégré (vue pharmacien) */
+/* Embedded preview (pharmacist view) */
 .embed .site-header, .embed .kente, .embed .patient-footer, .embed .skip-link { display: none; }
 .embed main { padding: 1rem .85rem 2rem; }
 .embed .hello h1 { font-size: 2rem; }
 
 /* =========================================================
-   Vue pharmacien
+   Pharmacist view
    ========================================================= */
 .brand-tag {
   font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
@@ -435,7 +435,7 @@ img, svg { max-width: 100%; }
 .grid2 { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
 .grid3 { display: grid; gap: 1rem; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); }
 
-/* Champs */
+/* Fields */
 .field { display: grid; gap: .35rem; margin-bottom: 1rem; align-content: start; }
 .field label, .field .label, .fs legend { font-weight: 700; }
 .field input, .field select, .field textarea {
@@ -457,7 +457,7 @@ img, svg { max-width: 100%; }
 .fs { border: 0; padding: 0; margin: 0 0 1rem; min-width: 0; }
 .fs legend { padding: 0; margin-bottom: .5rem; }
 
-/* Ajout */
+/* Adding medicines */
 .add-row { display: flex; gap: .75rem; align-items: flex-end; flex-wrap: wrap; }
 .add-field { flex: 1 1 260px; margin-bottom: 0; }
 .quick { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; margin: 1rem 0; }
@@ -472,7 +472,7 @@ img, svg { max-width: 100%; }
 .empty-meds { color: var(--ink-2); padding: 1.25rem; text-align: center; border: 2px dashed var(--line); border-radius: var(--radius-sm); margin: 0; }
 .empty-meds[hidden] { display: none; }
 
-/* Carte médicament */
+/* Medicine card */
 .med-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 1rem; }
 .med-card { border: 2px solid var(--line); border-radius: var(--radius); padding: 1rem 1.1rem .25rem; background: var(--bg); }
 .med-head { display: flex; align-items: center; gap: .75rem; margin-bottom: 1rem; }
@@ -533,7 +533,7 @@ img, svg { max-width: 100%; }
 .check-row svg { width: 20px; height: 20px; vertical-align: -4px; color: var(--primary); }
 .fiche-opts { border-top: 1px dashed var(--line); padding-top: .5rem; margin-bottom: .75rem; }
 
-/* Voix */
+/* Voice */
 .voice { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-bottom: .5rem; }
 .voice audio { max-width: 100%; }
 .btn-rec { background: var(--surface); color: var(--danger); border-color: var(--danger); }
@@ -545,7 +545,7 @@ img, svg { max-width: 100%; }
 .rec-bar { flex: 1 1 160px; height: 10px; background: var(--surface-2); border-radius: var(--radius-pill); overflow: hidden; }
 .rec-bar span { display: block; height: 100%; background: var(--danger); }
 
-/* Erreurs */
+/* Errors */
 .error-summary {
   border: 3px solid var(--danger); background: var(--danger-soft); border-radius: var(--radius-sm);
   padding: 1rem 1.25rem; margin-bottom: 1.25rem;
@@ -556,7 +556,7 @@ img, svg { max-width: 100%; }
 
 .generate-row { display: grid; gap: .5rem; justify-items: start; margin: 1.5rem 0; }
 
-/* Résultat */
+/* Result */
 .result { border: 3px solid var(--success); scroll-margin-top: 1rem; }
 .result:focus { outline: none; }
 .result.is-stale { border-color: #C98A0C; }
@@ -579,7 +579,7 @@ img, svg { max-width: 100%; }
 .btn-whatsapp { background: #0F7B3D; color: #fff; }
 .btn-whatsapp:hover { background: #0B6332; }
 
-/* Aperçu */
+/* Preview */
 .preview { position: sticky; top: 1rem; }
 .preview-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; }
 .preview-head h2 { font-size: 1.1rem; margin: 0; text-transform: uppercase; letter-spacing: .06em; color: var(--ink-2); }
@@ -609,7 +609,7 @@ img, svg { max-width: 100%; }
 }
 
 /* =========================================================
-   Feuille papier
+   Paper sheet
    ========================================================= */
 .print-btn { width: 100%; margin-top: 1.25rem; }
 .print-only { display: none; }
@@ -666,7 +666,7 @@ img, svg { max-width: 100%; }
 .ps-f-alert { background: #FCE6E4; padding: 1.5mm 2mm; border-radius: 2mm; }
 
 /* =========================================================
-   Page d'accueil
+   Home page
    ========================================================= */
 .landing main:focus { outline: none; }
 .hero {
