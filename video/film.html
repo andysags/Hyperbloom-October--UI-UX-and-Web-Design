@@ -1,0 +1,752 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dose · demo film (motion design source)</title>
+<meta name="viewport" content="width=1920">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:wght@400;700&family=Caveat:wght@500;600&display=block" rel="stylesheet">
+<style>
+  /* =========================================================
+     Dose demo film. Every frame is computed by window.seek(t):
+     no CSS transitions, no timers, no state between frames.
+     Rendered frame by frame by video/render.py.
+     ========================================================= */
+  :root {
+    --bg: #FBF6EE; --surface: #fff; --surface-2: #F4ECDF; --line: #E3D8C6;
+    --ink: #1B1F3B; --ink-2: #4A4F68; --primary: #2B3A8C; --primary-soft: #E6E9F7;
+    --success: #1D6B43; --success-soft: #E2F2E8; --danger: #A12622; --danger-soft: #FCE6E4;
+    --warn-soft: #FFF1D6; --sun: #F2B33D;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: #0b0b0c; }
+  body { font-family: "Atkinson Hyperlegible", sans-serif; color: var(--ink); }
+  #stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+  .layer { position: absolute; inset: 0; }
+  .abs { position: absolute; }
+  .kente { position: absolute; left: 0; right: 0; top: 0; height: 14px; z-index: 50;
+    background: repeating-linear-gradient(135deg, #2B3A8C 0 16px, #F2B33D 16px 32px, #B4441F 32px 48px, #1D6B43 48px 64px); }
+  .wm { display: inline-block; overflow: hidden; vertical-align: top; padding: 0 .02em .1em; margin-bottom: -.1em; }
+  .wi { display: inline-block; will-change: transform; }
+  .kicker { font-size: 24px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--primary); }
+  .h1 { font-size: 76px; font-weight: 700; line-height: 1.06; letter-spacing: -.02em; }
+  .h2 { font-size: 56px; font-weight: 700; line-height: 1.1; letter-spacing: -.015em; }
+  .sub { font-size: 28px; line-height: 1.35; color: var(--ink-2); }
+  .src { font-size: 24px; color: var(--ink-2); letter-spacing: .01em; }
+  .accent { color: var(--primary); }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 28px;
+    box-shadow: 0 2px 4px rgba(27,31,59,.05), 0 24px 60px rgba(27,31,59,.10); }
+  .chip { display: inline-flex; align-items: center; gap: 10px; height: 56px; padding: 0 22px 0 14px;
+    border-radius: 999px; background: var(--surface-2); font-size: 23px; font-weight: 700; white-space: nowrap; }
+  .chip svg { width: 28px; height: 28px; }
+  .tag { position: absolute; font-size: 18px; font-weight: 700; color: var(--ink-2); background: var(--surface-2);
+    border-radius: 999px; padding: 6px 14px; letter-spacing: .02em; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; }
+  .meal-seq { display: inline-flex; align-items: center; gap: 8px; background: var(--surface-2); border-radius: 999px;
+    padding: 4px 16px 4px 6px; font-weight: 700; }
+  .meal-seq .seq { display: inline-flex; align-items: center; gap: 2px; }
+  .meal-seq svg { width: 30px; height: 30px; flex: none; }
+  .meal-seq .arrow { width: 18px !important; height: 18px !important; color: var(--ink-2); }
+  .take { display: flex; align-items: center; justify-content: center; gap: 10px; height: 56px; border-radius: 999px;
+    border: 3px solid var(--success); color: var(--success); font-weight: 700; font-size: 22px; background: #fff; }
+  .take svg { width: 26px; height: 26px; }
+  .listen { width: 50px; height: 50px; border-radius: 50%; border: 2px solid var(--primary); background: var(--primary-soft);
+    color: var(--primary); display: grid; place-items: center; }
+  .listen svg { width: 24px; height: 24px; }
+  /* Cursor */
+  #cursor { position: absolute; left: 0; top: 0; width: 44px; height: 44px; z-index: 60; }
+  #ring { position: absolute; width: 70px; height: 70px; border-radius: 50%; border: 3px solid var(--primary); z-index: 59; opacity: 0; }
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="kente"></div>
+
+  <!-- S1 · Hook: a handwritten prescription -->
+  <div class="layer" id="s1">
+    <div class="abs" id="paper" style="left:510px;top:170px;width:900px;height:470px;background:#FFFDF7;border:1px solid var(--line);border-radius:8px;
+      box-shadow:0 30px 70px rgba(27,31,59,.16);background-image:repeating-linear-gradient(#FFFDF7 0 63px,#E6E9F7 63px 65px);padding:46px 60px;">
+      <div id="hand" style="font-family:Caveat,cursive;font-size:66px;line-height:65px;color:#2B3A8C;font-weight:500;"></div>
+      <span class="tag" style="right:22px;bottom:-54px">Example prescription</span>
+    </div>
+    <div class="abs h1" id="s1q" style="left:0;right:0;top:770px;text-align:center"></div>
+  </div>
+
+  <!-- S2 · Problem -->
+  <div class="layer" id="s2">
+    <div class="abs h1" id="s2a" style="left:160px;top:300px;width:1640px;font-size:84px"></div>
+    <div class="abs" id="dots" style="left:160px;top:560px;display:flex;gap:26px"></div>
+    <div class="abs src" id="s2src" style="left:160px;top:690px;font-size:26px"></div>
+    <div class="abs h1" id="s2b" style="left:160px;top:330px;width:1600px;font-size:88px"></div>
+    <svg class="abs" id="s2u" width="1920" height="1080" style="left:0;top:0;overflow:visible"></svg>
+  </div>
+
+  <!-- S3 · Logo (the brand group stays on screen and docks top-left) -->
+  <div class="abs" id="brand" style="left:0;top:0;width:1px;height:1px;z-index:40">
+    <div class="abs" id="logoBox" style="left:-90px;top:-90px;width:180px;height:180px;border-radius:52px;background:#2B3A8C"></div>
+    <svg class="abs" id="capsule" viewBox="0 0 48 48" style="left:-90px;top:-90px;width:180px;height:180px;overflow:visible">
+      <g id="capsuleG"><path d="M24 15h-9a9 9 0 0 0 0 18h9z" fill="#F2B33D" stroke="#1B1F3B" stroke-width="0"/><path d="M24 15h9a9 9 0 0 1 0 18h-9z" fill="#fff"/></g>
+    </svg>
+    <div class="abs" id="wordmarkWrap" style="left:120px;top:-95px;overflow:hidden;height:190px">
+      <div id="wordmark" style="font-size:160px;font-weight:700;letter-spacing:-.03em;line-height:190px">Dose</div>
+    </div>
+  </div>
+  <div class="layer" id="s3">
+    <div class="abs h2" id="tagline" style="left:0;right:0;top:640px;text-align:center;font-size:60px"></div>
+  </div>
+
+  <!-- Captions column (S4 to S6) -->
+  <div class="layer" id="caps" style="z-index:30"></div>
+
+  <!-- S4 · Pharmacist -->
+  <div class="layer" id="s4">
+    <div class="abs card" id="pcard" style="left:860px;top:120px;width:920px;height:850px;overflow:hidden">
+      <div id="pform" class="abs" style="inset:0;padding:36px 40px">
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <div style="font-size:40px;font-weight:700">New prescription</div>
+          <div class="chip" style="background:var(--primary-soft);color:var(--primary);padding:0 22px">Afi · Fɔngbè</div>
+        </div>
+        <div style="margin-top:30px;font-size:22px;font-weight:700;color:var(--ink-2)">Frequent</div>
+        <div id="chips" style="display:flex;gap:14px;margin-top:12px"></div>
+        <div id="rows" style="position:relative;margin-top:26px;height:380px"></div>
+        <div id="voiceRow" style="display:flex;align-items:center;gap:22px;height:70px">
+          <div id="recBtn" style="display:flex;align-items:center;gap:12px;height:58px;padding:0 26px;border-radius:999px;border:3px solid var(--danger);color:var(--danger);font-weight:700;font-size:23px;background:#fff">
+            <span id="recDot" style="width:16px;height:16px;border-radius:50%;background:currentColor"></span><span id="recLabel">Record</span>
+          </div>
+          <svg id="wave" width="420" height="60"></svg>
+          <div id="recTime" style="font-size:24px;font-weight:700;color:var(--danger)">0:00</div>
+        </div>
+        <div id="createBtn" style="margin-top:22px;height:68px;border-radius:999px;background:var(--primary);color:#fff;font-size:26px;font-weight:700;display:grid;place-items:center">Create patient prescription</div>
+      </div>
+      <div id="pqr" class="abs" style="inset:0;padding:36px 40px;text-align:center">
+        <div style="display:flex;align-items:center;gap:16px;justify-content:center">
+          <span style="width:52px;height:52px;border-radius:50%;background:var(--success);display:grid;place-items:center;color:#fff" id="okIcon"></span>
+          <span style="font-size:42px;font-weight:700">Prescription ready</span>
+        </div>
+        <div id="qrHole" style="width:440px;height:440px;margin:34px auto 0"></div>
+        <div id="handoffChips" style="display:flex;gap:14px;justify-content:center;margin-top:34px"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- S5 · Morph: QR code becomes the patient's phone -->
+  <div class="abs" id="morph" style="z-index:20;overflow:hidden;background:#fff">
+    <div class="abs" id="morphQR" style="left:0;top:0"></div>
+    <div class="abs" id="screen" style="left:0;top:0;width:432px;height:912px;overflow:hidden;background:var(--bg)">
+      <div id="scroller" class="abs" style="left:0;top:0;width:432px"></div>
+      <div id="sheet" class="abs" style="left:0;top:0;width:432px;height:912px"></div>
+      <div id="hl" class="abs" style="border:4px solid #2B3A8C;border-radius:22px;opacity:0;pointer-events:none"></div>
+    </div>
+  </div>
+
+  <!-- S7 · Paper -->
+  <div class="layer" id="s7">
+    <div class="abs h2" id="s7a" style="left:0;right:0;top:70px;text-align:center"></div>
+    <div class="abs card" id="sheetPaper" style="left:210px;top:200px;width:1500px;height:800px;border-radius:10px;padding:34px 40px"></div>
+  </div>
+
+  <!-- S8 · Languages -->
+  <div class="layer" id="s8">
+    <div class="abs kicker" id="s8k" style="left:0;right:0;top:200px;text-align:center"></div>
+    <div class="abs" id="s8icon" style="left:880px;top:270px"></div>
+    <div class="abs" id="s8words" style="left:0;right:0;top:460px;height:190px;overflow:hidden;text-align:center"></div>
+    <div class="abs" id="s8names" style="left:0;right:0;top:660px;height:50px;overflow:hidden;text-align:center"></div>
+    <div class="abs h2" id="s8line" style="left:0;right:0;top:800px;text-align:center;font-size:46px"></div>
+  </div>
+
+  <!-- S9 · End card text (the brand group flies back to centre) -->
+  <div class="layer" id="s9">
+    <div class="abs h2" id="endTag" style="left:0;right:0;top:600px;text-align:center;font-size:58px"></div>
+    <div class="abs" id="endUrl" style="left:0;right:0;top:720px;text-align:center;font-size:30px;font-weight:700;color:var(--primary)"></div>
+    <div class="abs src" id="endFoot" style="left:0;right:0;top:960px;text-align:center;font-size:22px"></div>
+  </div>
+
+  <span class="tag" id="exampleTag" style="left:60px;bottom:40px;z-index:45">Example prescription · not medical advice</span>
+
+  <div id="ring"></div>
+  <svg id="cursor" viewBox="0 0 24 24"><path d="M4 2l15 11.5-6.4.9 3.7 7.4-2.7 1.3-3.7-7.5L4 20z" fill="#1B1F3B" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg>
+</div>
+
+<script src="../assets/js/core.js"></script>
+<script src="../assets/js/catalog.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  const D = window.Dose;
+  D.setLang('en', { persist: false });
+  const $ = (id) => document.getElementById(id);
+  const T_END = 58.0;
+
+  /* ---------- Time helpers ---------- */
+  const clamp = (v, a = 0, b = 1) => Math.min(b, Math.max(a, v));
+  const p = (t, a, b) => clamp((t - a) / (b - a));
+  const eo = (x) => 1 - Math.pow(1 - x, 3);
+  const eio = (x) => (x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+  const ein = (x) => x * x * x;
+  const lerp = (a, b, k) => a + (b - a) * k;
+  /* Closed-form spring step response: 0 → 1, damping ratio z (≥ .72 = tiny overshoot) */
+  function spring(dt, f = 1.8, z = 0.78) {
+    if (dt <= 0) return 0;
+    const w = 2 * Math.PI * f, wd = w * Math.sqrt(1 - z * z);
+    return 1 - Math.exp(-z * w * dt) * (Math.cos(wd * dt) + (z * w / wd) * Math.sin(wd * dt));
+  }
+  const BAR = 4 * 60 / 99.38; /* 2.415 s, the music bar */
+  const DROP = 28.0;          /* musical lift = patient phone */
+  const bar = (n) => DROP + n * BAR;
+
+  const tf = (el, x, y, s = 1, r = 0) => { el.style.transform = `translate(${x}px,${y}px) scale(${s}) rotate(${r}deg)`; };
+  const show = (el, on) => { el.style.visibility = on ? 'inherit' : 'hidden'; };
+
+  /* ---------- Masked word rise ---------- */
+  /* Splits text into masked words. *word* = accent colour. */
+  function words(el, text) {
+    let acc = false;
+    el.innerHTML = text.split(/\s+/).filter(Boolean).map((w) => {
+      let a = acc;
+      if (w.startsWith('*')) { a = true; acc = true; w = w.slice(1); }
+      if (w.endsWith('*')) { acc = false; w = w.slice(0, -1); }
+      return `<span class="wm"><span class="wi${a ? ' accent' : ''}">${w}</span></span>`;
+    }).join(' ');
+    return [...el.querySelectorAll('.wi')];
+  }
+  /* In at t0 (spring, 55 ms stagger), out at t1 (rises away) */
+  function rise(ws, t, t0, t1, stagger = 0.055) {
+    ws.forEach((w, i) => {
+      const k = spring(t - t0 - i * stagger, 1.5, 0.8);
+      let y = (1 - k) * 112, r = (1 - k) * 5;
+      let gone = false;
+      if (t1 != null) { const e = ein(p(t, t1 + i * 0.025, t1 + 0.32 + i * 0.025)); y -= e * 112; gone = e >= 1; }
+      w.parentNode.style.visibility = (t < t0 + i * stagger || gone) ? 'hidden' : 'inherit';
+      w.style.transform = `translateY(${y.toFixed(2)}%) rotate(${r.toFixed(2)}deg)`;
+    });
+  }
+
+  /* ---------- S1 · handwriting ---------- */
+  const HAND = ['Art.-Lum. 20/120', '4cp x2/j pdt repas x3j', 'Para 1g si T°>38,5 · max 3/j', 'Fer 1cp/j av. repas x30j'];
+  $('hand').innerHTML = HAND.map((l, i) => `<div class="hl" style="white-space:nowrap;transform:rotate(${[0, .8, -1.2, .5][i]}deg);transform-origin:left">${l}</div>`).join('') +
+    '<div class="hl" style="text-align:right;transform:rotate(-6deg);font-size:72px;margin-top:-6px">Dr K.</div>';
+  const handLines = [...document.querySelectorAll('#hand .hl')];
+  const s1q = words($('s1q'), 'Can you read this?');
+
+  /* ---------- S2 · problem ---------- */
+  const s2aW = words($('s2a'), '*About half* of adults in Benin can&#39;t read.');
+  $('dots').innerHTML = Array.from({ length: 10 }, () =>
+    `<svg width="64" height="64" viewBox="0 0 64 64"><circle cx="32" cy="22" r="13" class="hd"/><path d="M8 62a24 24 0 0 1 48 0z" class="bd"/></svg>`).join('');
+  const dots = [...$('dots').children];
+  const s2src = words($('s2src'), 'Adult literacy in Benin: around 47 to 51 %. UNESCO data, 2022.');
+  const s2b = words($('s2b'), 'Prescriptions are *handwritten,* *abbreviated* and in *French.*');
+
+  /* ---------- S3 · tagline ---------- */
+  const tag = words($('tagline'), 'The prescription *everyone* can read.');
+
+  /* ---------- Captions (S4 to S6): kicker + headline + optional source ---------- */
+  const CAPS = [
+    { t0: 16.05, t1: bar(-3) - 0.4, k: 'For the pharmacist', h: 'One tap<br>per medicine.', s: 'Pre-filled from the catalogue: shape, colour, times of day.' },
+    { t0: bar(-3), t1: bar(-2) - 0.4, k: 'Voice message', h: 'Their voice,<br>their language.', s: 'Fon, Yoruba, Mina… text-to-speech can&#39;t speak them. The pharmacist can.' },
+    { t0: bar(-2), t1: bar(-1) - 0.35, k: 'Hand-off', h: 'QR code, WhatsApp,<br>SMS or paper.', s: 'No account. The prescription lives inside the link.' },
+    { t0: bar(-1), t1: DROP - 0.35, k: 'For the patient', h: 'Scan it.', s: '' },
+    { t0: DROP + 0.1, t1: bar(1) - 0.35, k: 'Only today', h: '4 tablets =<br>4 drawings.', s: 'With pictograms, understanding of medicine labels rose from 70 % to 95 % in one study. Dowse &amp; Ehlers, 2005.' },
+    { t0: bar(1), t1: bar(2) - 0.35, k: 'Meals', h: 'Pill, then plate:<br>before eating.', s: 'The order of the pictures tells the instruction.' },
+    { t0: bar(2), t1: bar(3) - 0.35, k: 'One action', h: 'One big button<br>per dose.', s: '' },
+    { t0: bar(3), t1: bar(4) - 0.35, k: 'Listen', h: 'Read aloud, or in<br>the pharmacist&#39;s voice.', s: '' },
+    { t0: bar(4), t1: bar(5) - 0.35, k: 'Understand', h: 'What is this<br>medicine for?', s: 'Short sheets, validated by the pharmacist.' },
+    { t0: bar(5), t1: bar(6) - 0.35, k: 'Safety', h: 'Painkillers lock at<br>the daily maximum.', s: '' }
+  ];
+  $('caps').innerHTML = CAPS.map((c, i) => `<div class="abs" id="cap${i}" style="left:140px;top:330px;width:680px">
+      <div class="kicker" id="capk${i}"></div><div class="h1" id="caph${i}" style="margin-top:18px"></div>
+      <div class="sub" id="caps${i}" style="margin-top:26px"></div></div>`).join('');
+  CAPS.forEach((c, i) => {
+    c.el = $('cap' + i);
+    c.wk = words($('capk' + i), c.k);
+    $('caph' + i).innerHTML = c.h.split('<br>').map((l) => `<div>${l}</div>`).join('');
+    c.wh = []; c.h.split('<br>').forEach((line, j) => { c.wh.push(...words($('caph' + i).children[j], line)); });
+    c.ws = c.s ? words($('caps' + i), c.s) : [];
+  });
+  /* The patient captions sit left of the phone; the pharmacist ones too */
+
+  /* ---------- S4 · pharmacist card ---------- */
+  const MEDS = [
+    { k: 'al', n: 'Artemether-Lumefantrine', f: 'round', c: 'yellow', q: 4, sum: '4 tablets · Morning, Evening · With food · 3 days', chip: 'Artemether-Lumefantrine' },
+    { k: 'para', n: 'Paracetamol', f: 'round', c: 'white', q: 2, sum: '2 tablets · Only if needed, at most 3 a day', chip: 'Paracetamol' },
+    { k: 'fer', n: 'Iron + folic acid', f: 'round', c: 'red', q: 1, sum: '1 tablet · Morning · Before eating · 30 days', chip: 'Iron + folic acid' }
+  ];
+  $('chips').innerHTML = MEDS.map((m, i) => `<div class="chip" id="chip${i}">${D.pillSVG(m.f, m.c, null, 28)}<span>${m.chip}</span></div>`).join('');
+  $('rows').innerHTML = MEDS.map((m, i) => `<div class="abs" id="row${i}" style="left:0;right:0;top:${i * 124}px;height:110px;border:2px solid var(--line);border-radius:22px;background:var(--bg);display:flex;align-items:center;gap:22px;padding:0 24px">
+      <div style="width:84px">${D.pillsHTML(m, 34)}</div>
+      <div><div style="font-size:28px;font-weight:700">${m.n}</div><div style="font-size:21px;color:var(--ink-2);font-weight:700;margin-top:4px">${m.sum}</div></div></div>`).join('');
+  $('okIcon').innerHTML = D.ICON.check.replace('class="check"', 'width="30" height="30"');
+  $('handoffChips').innerHTML = ['▣ QR code', 'WhatsApp', 'SMS', 'Print'].map((c, i) =>
+    `<div class="chip" id="hchip${i}" style="${i === 1 ? 'background:#0F7B3D;color:#fff' : ''}">${c}</div>`).join('');
+
+  /* Real QR code that opens the live patient example */
+  const QR_URL = 'https://andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design/patient.html?lang=en';
+  let qrSvg = '';
+  if (typeof window.qrcode === 'function') {
+    const q = window.qrcode(0, 'M'); q.addData(QR_URL); q.make();
+    qrSvg = q.createSvgTag({ cellSize: 10, margin: 0, scalable: true });
+  }
+  $('qrHole').innerHTML = qrSvg;
+  $('morphQR').innerHTML = qrSvg;
+  document.querySelectorAll('#qrHole svg, #morphQR svg').forEach((s) => { s.style.width = '100%'; s.style.height = '100%'; s.style.display = 'block'; });
+
+  /* ---------- S6 · patient screen (rebuilt from the real app) ---------- */
+  const AL = MEDS[0], FER = MEDS[2], PARA = MEDS[1];
+  $('scroller').innerHTML = `
+    <div style="padding:26px 22px 0">
+      <div style="font-size:17px;color:var(--ink-2)">Tuesday · Day 2 of 3</div>
+      <div id="hello" style="font-size:46px;font-weight:700;letter-spacing:-.02em;margin-top:4px">Hello Afi</div>
+      <div style="font-size:17px;color:var(--ink-2);margin-top:2px">Prescription explained by Market Pharmacy</div>
+      <div style="display:flex;align-items:center;gap:10px;margin-top:14px;font-weight:700;font-size:17px">Day 2 of 3
+        <span style="flex:1;height:10px;background:var(--surface-2);border-radius:99px;overflow:hidden"><span id="dayBar" style="display:block;height:100%;width:0;background:var(--primary);border-radius:99px"></span></span></div>
+      <div id="voiceBtn" style="margin-top:16px;height:54px;border-radius:999px;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;gap:10px;font-weight:700;font-size:17px">
+        <svg width="20" height="20" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" fill="currentColor"/></svg>Message from your pharmacist, in Fɔngbè</div>
+    </div>
+    <div id="mCard" style="margin:18px 14px 0;background:#fff;border:1px solid var(--line);border-top:8px solid var(--sun);border-radius:22px;padding:16px">
+      <div style="display:flex;align-items:center;gap:12px">${D.momentSVG('morning', 54)}
+        <div style="flex:1"><div style="font-size:28px;font-weight:700">Morning</div><div style="font-size:15px;color:var(--ink-2)">When you wake up · around 7 am</div></div>
+        <div class="listen" id="listenBtn">${D.ICON.speaker}</div></div>
+      <div id="doseAL" style="margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:14px">
+        <div style="display:flex;gap:14px"><div style="width:76px;flex:none" id="alPills"></div>
+          <div><div style="font-size:26px;font-weight:700">4 tablets</div><div style="font-size:16px;color:var(--ink-2)"><b style="color:var(--ink)">${AL.n}</b> 20/120 mg</div>
+          <div style="margin-top:8px;font-size:15px" id="alMeal">${D.mealHTML('with', AL)}</div></div></div>
+        <div class="take" id="takeAL" style="margin-top:12px">${D.ICON.check}<span id="takeALt">I took it</span></div>
+      </div>
+      <div id="doseFER" style="margin-top:12px;border:2px solid var(--line);border-radius:16px;padding:14px">
+        <div style="display:flex;gap:14px"><div style="width:76px;flex:none">${D.pillsHTML(FER, 34)}</div>
+          <div><div style="font-size:26px;font-weight:700">1 tablet</div><div style="font-size:16px"><b>${FER.n}</b></div>
+          <div style="margin-top:8px;font-size:15px" id="ferMeal">${D.mealHTML('before', FER)}</div></div></div>
+        <div class="take" style="margin-top:12px">${D.ICON.check}<span>I took it</span></div>
+      </div>
+    </div>
+    <div id="prnCard" style="margin:16px 14px 0;background:#fff;border:1px solid var(--line);border-top:8px solid var(--ink-2);border-radius:22px;padding:16px">
+      <div style="display:flex;align-items:center;gap:12px"><span style="width:54px;height:54px;border-radius:16px;background:var(--surface-2);display:grid;place-items:center;font-size:28px;font-weight:700;color:var(--ink-2)">?</span>
+        <div><div style="font-size:26px;font-weight:700">Only if needed</div><div style="font-size:15px;color:var(--ink-2)">Only take these if you need them.</div></div></div>
+      <div style="margin-top:14px;border:2px solid var(--line);border-radius:16px;padding:14px">
+        <div style="display:flex;gap:14px"><div style="width:76px;flex:none">${D.pillsHTML(PARA, 34)}</div>
+          <div><div style="font-size:26px;font-weight:700">2 tablets</div><div style="font-size:16px"><b>${PARA.n}</b> 500 mg</div>
+          <div style="margin-top:8px;font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px"><span id="prnDots" style="display:inline-flex;gap:5px"></span><span id="prnCount">0 of 3 today</span></div></div></div>
+        <div id="prnLimit" style="margin-top:10px;padding:8px 12px;border-radius:12px;background:var(--danger-soft);color:var(--danger);font-weight:700;font-size:16px">Daily maximum reached. No more before tomorrow.</div>
+        <div class="take" id="prnBtn" style="margin-top:10px">${D.ICON.check}<span>I took one</span></div>
+      </div>
+    </div>`;
+  $('alPills').innerHTML = `<div class="pill-row" id="alPillRow">${Array.from({ length: 4 }, () => D.pillSVG('round', 'yellow', null, 34)).join('')}</div>`;
+  const alPills = [...$('alPillRow').children];
+  $('prnDots').innerHTML = Array.from({ length: 3 }, () => '<span class="pd" style="width:15px;height:15px;border-radius:50%;border:2px solid #4A4F68;display:inline-block"></span>').join('');
+  const prnDots = [...$('prnDots').children];
+  const FI = D.FICHES.al.en;
+  $('sheet').innerHTML = `<div id="sheetIn" class="abs" style="left:0;right:0;bottom:0;height:780px;background:var(--bg);border-radius:26px 26px 0 0;box-shadow:0 -14px 40px rgba(27,31,59,.25);padding:22px 18px">
+      <div style="display:flex;gap:12px;align-items:center">${D.pillSVG('round', 'yellow', null, 46)}<div><div style="font-size:24px;font-weight:700;line-height:1.1">${AL.n}</div><div style="color:var(--primary);font-weight:700;font-size:17px">For malaria</div></div></div>
+      ${[['🎯', 'What it is for', FI.use, '#fff'], ['✅', 'How to take it well', FI.how, '#E2F2E8'], ['🚨', 'Come back if…', FI.alert.slice(0, 2), '#FCE6E4']].map(([ic, ti, items, bg]) =>
+        `<div style="margin-top:14px;background:${bg};border:1px solid var(--line);border-radius:14px;padding:12px 14px"><div style="font-weight:700;font-size:18px">${ic} ${ti}</div>
+          <ul style="margin:6px 0 0;padding-left:20px;font-size:16px;line-height:1.35">${items.map((x) => `<li>${x}</li>`).join('')}</ul></div>`).join('')}
+    </div>`;
+  const sheetIn = $('sheetIn');
+
+  /* ---------- S7 · paper sheet ---------- */
+  const s7a = words($('s7a'), 'No smartphone? *Print it.*');
+  const DAYS = 7;
+  const ROWS = [
+    { h: 'morning', label: 'Morning' }, { m: AL, txt: '4 tablets · ' + AL.n, j: 3 }, { m: FER, txt: '1 tablet · ' + FER.n, j: 30 },
+    { h: 'evening', label: 'Evening' }, { m: AL, txt: '4 tablets · ' + AL.n, j: 3 }
+  ];
+  let paper = `<div style="display:flex;align-items:center;gap:16px;border-bottom:3px solid var(--ink);padding-bottom:16px">
+      <span style="width:46px;height:46px">${D.ICON.logo}</span><span style="font-size:30px;font-weight:700">My medicine calendar</span>
+      <span style="margin-left:auto;font-size:22px;color:var(--ink-2)">For <b style="color:var(--ink)">Afi</b> · Market Pharmacy (example)</span></div>
+    <div style="display:grid;grid-template-columns:520px repeat(${DAYS},1fr);margin-top:18px;border:2px solid #9A9384;border-radius:6px;overflow:hidden">
+      <div style="background:var(--surface-2)"></div>${Array.from({ length: DAYS }, (_, d) => `<div style="background:var(--surface-2);padding:10px;text-align:center;font-weight:700;font-size:20px;border-left:1px solid #9A9384">Day ${d + 1}</div>`).join('')}`;
+  let boxId = 0;
+  ROWS.forEach((r) => {
+    if (r.h) {
+      paper += `<div style="grid-column:1/-1;display:flex;align-items:center;gap:12px;padding:8px 14px;background:#FBF6EE;border-top:1px solid #9A9384;font-weight:700;font-size:24px">${D.momentSVG(r.h, 40)}${r.label}</div>`;
+    } else {
+      paper += `<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid #9A9384;font-size:21px"><span style="width:${r.m.q > 1 ? 70 : 32}px">${D.pillsHTML(r.m, 26)}</span><span><b>${r.txt.split(' · ')[0]}</b> ${r.txt.split(' · ')[1]}</span></div>`;
+      for (let d = 0; d < DAYS; d++) {
+        const na = d >= r.j;
+        paper += `<div style="border-top:1px solid #9A9384;border-left:1px solid #9A9384;display:grid;place-items:center;height:92px;${na ? 'background:repeating-linear-gradient(135deg,#ddd 0 2px,#fff 2px 7px)' : ''}">${na ? '' :
+          `<svg width="50" height="50" viewBox="0 0 50 50"><rect x="5" y="5" width="40" height="40" rx="6" fill="#fff" stroke="#1B1F3B" stroke-width="3"/><path class="tick" data-b="${boxId++}" data-d="${d}" d="M12 26 l9 9 l18 -20" fill="none" stroke="#2B3A8C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="44" stroke-dashoffset="44"/></svg>`}</div>`;
+      }
+    }
+  });
+  paper += '</div><div style="margin-top:16px;font-size:20px;color:var(--ink-2)">Tick a box each time you take the medicine. On the back: what each medicine is for.</div>';
+  $('sheetPaper').innerHTML = paper;
+  const ticks = [...document.querySelectorAll('#sheetPaper .tick')].sort((a, b) => (a.dataset.d - b.dataset.d) || (a.dataset.b - b.dataset.b));
+
+  /* ---------- S8 · languages ---------- */
+  const LANGS = [['Morning', 'English'], ['Matin', 'Français'], ['Mañana', 'Español'], ['Manhã', 'Português'], ['Mattina', 'Italiano']];
+  $('s8icon').innerHTML = D.momentSVG('morning', 160);
+  $('s8words').innerHTML = LANGS.map(([w]) => `<div class="abs w8" style="left:0;right:0;top:0;font-size:150px;font-weight:700;letter-spacing:-.03em;line-height:190px">${w}</div>`).join('');
+  $('s8names').innerHTML = LANGS.map(([, n]) => `<div class="abs n8" style="left:0;right:0;top:0;font-size:32px;font-weight:700;color:var(--ink-2);line-height:50px">${n}</div>`).join('');
+  const w8 = [...document.querySelectorAll('.w8')], n8 = [...document.querySelectorAll('.n8')];
+  const s8k = words($('s8k'), 'Five interface languages');
+  const s8line = words($('s8line'), '+ the pharmacist&#39;s own voice in *Fon, Yoruba, Mina…*');
+
+  /* ---------- S9 ---------- */
+  const endTag = words($('endTag'), 'The prescription *everyone* can read.');
+  const endUrl = words($('endUrl'), 'andysags.github.io/Hyperbloom-October--UI-UX-and-Web-Design');
+  const endFoot = words($('endFoot'), 'HyperBloom October 2026 · UI/UX &amp; Web Design hackathon');
+
+  /* ---------- Cursor path: [t, x, y] and clicks ---------- */
+  const CHIP_Y = 130 + 36 + 30 + 22 + 12 + 28; /* card top + paddings → chip centre ≈ 258 */
+  const CUR = [
+    [15.9, 1900, 1100], [16.6, 1040, CHIP_Y], [17.45, 1360, CHIP_Y], [18.3, 1620, CHIP_Y], [19.6, 1700, 640],
+    [bar(-3) + 0.4, 990, 785], [bar(-2) - 0.1, 1310, 905], [bar(-2) + 1.4, 1880, 1060],
+    [DROP + 0.5, 1900, 1100], [bar(2) - 0.3, 1560, 760], [bar(2) + 0.6, 1290, 640], [bar(3) + 0.4, 1440, 470], [bar(4) + 0.2, 1350, 760],
+    [bar(4) + 1.2, 1700, 1000], [bar(5) + 0.3, 1290, 900], [bar(6) - 0.2, 1880, 1080]
+  ];
+  const CLICKS = [16.6, 17.45, 18.3, bar(-3) + 0.4, bar(-2) - 0.1, bar(2) + 0.6, bar(3) + 0.4, bar(4) + 0.2, bar(5) + 0.45, bar(5) + 0.95, bar(5) + 1.45];
+  /* Cursor y for the patient taps is set to the real element positions at load */
+  window.CLICKS = CLICKS;
+
+  function cursorAt(t) {
+    if (t <= CUR[0][0]) return { x: CUR[0][1], y: CUR[0][2] };
+    for (let i = 0; i < CUR.length - 1; i++) {
+      const [a, ax, ay] = CUR[i], [b, bx, by] = CUR[i + 1];
+      if (t <= b) {
+        const dur = Math.min(0.55, b - a);
+        const k = eio(p(t, b - dur, b));
+        return { x: lerp(ax, bx, k), y: lerp(ay, by, k) };
+      }
+    }
+    const l = CUR[CUR.length - 1]; return { x: l[1], y: l[2] };
+  }
+
+  /* ---------- Phone geometry ---------- */
+  const QR_FROM = { x: 860 + 240, y: 120 + 36 + 52 + 34, w: 440, h: 440, r: 6, b: 0 };
+  const PHONE = { x: 1150, y: 64, w: 460, h: 940, r: 60, b: 14 };
+
+  /* =========================================================
+     seek(t)
+     ========================================================= */
+  window.seek = async function (t) {
+    /* ---- S1 hook ---- */
+    const on1 = t < 6.6; show($('s1'), on1);
+    if (on1) {
+      const paper = $('paper');
+      const inK = spring(t - 0.15, 1.2, 0.85);
+      const outK = ein(p(t, 5.9, 6.4));
+      tf(paper, 0, (1 - inK) * 60 - outK * 700, 1 + 0.035 * p(t, 0, 6), -2 + (1 - inK) * 2);
+      paper.style.opacity = clamp(inK * 1.4);
+      paper.style.filter = `blur(${(eio(p(t, 3.7, 4.4)) * 2.2).toFixed(2)}px)`;
+      const starts = [0.5, 1.15, 1.95, 2.75, 3.45], durs = [0.6, 0.75, 0.75, 0.65, 0.35];
+      handLines.forEach((l, i) => { const k = p(t, starts[i], starts[i] + durs[i]); l.style.clipPath = `inset(-20px ${((1 - k) * 100).toFixed(2)}% -20px -10px)`; });
+      rise(s1q, t, 3.95, 5.85);
+    }
+
+    /* ---- S2 problem ---- */
+    const on2 = t > 6.1 && t < 11.4; show($('s2'), on2);
+    if (on2) {
+      rise(s2aW, t, 6.35, 8.75);
+      dots.forEach((d, i) => {
+        const k = spring(t - 6.8 - i * 0.07, 2, 0.8), out = ein(p(t, 8.7 + i * 0.015, 9.0 + i * 0.015));
+        d.style.transform = `translateY(${(1 - k) * 40 - out * 60}px) scale(${0.6 + 0.4 * k})`;
+        d.style.opacity = clamp(k * 1.5) * (1 - out);
+        const filled = i < 5 && t > 7.35 + i * 0.12;
+        d.querySelectorAll('circle,path').forEach((s) => { s.setAttribute('fill', filled ? '#2B3A8C' : '#E3D8C6'); });
+      });
+      rise(s2src, t, 6.95, 8.75, 0.02);
+      rise(s2b, t, 9.05, 10.8, 0.06);
+      /* Hand-drawn underlines under the three accent words */
+      const acc = [...$('s2b').querySelectorAll('.accent')];
+      if (!$('s2u').dataset.built && acc.length) {
+        $('s2u').innerHTML = acc.map(() => '<path fill="none" stroke="#F2B33D" stroke-width="10" stroke-linecap="round"/>').join('');
+        $('s2u').dataset.built = '1';
+      }
+      const paths = [...$('s2u').children];
+      acc.forEach((a, i) => {
+        const r = a.getBoundingClientRect(), y = r.bottom - 6;
+        const len = r.width;
+        const pth = paths[i];
+        pth.setAttribute('d', `M${r.left} ${y} q ${len / 2} 10 ${len} -2`);
+        pth.setAttribute('stroke-dasharray', `${len * 2} ${len * 4}`);
+        const k = eo(p(t, 9.65 + i * 0.25, 10.0 + i * 0.25)), out = p(t, 10.75, 10.95);
+        pth.setAttribute('stroke-dashoffset', len * 2 * (1 - k));
+        pth.style.opacity = k > 0 ? 1 - out : 0;
+      });
+    }
+
+    /* ---- Brand group: logo reveal, dock top-left, fly back at the end ---- */
+    const brand = $('brand');
+    const onB = t > 10.9; show(brand, onB);
+    if (onB) {
+      /* states: centre (960,470) scale 1 → dock (70,56) scale .26 → end (960,420) scale 1.1 */
+      let bx = 960 - 175, by = 470, bs = 1;
+      const dock = eio(p(t, 15.55, 16.3)), back = eio(p(t, bar(10) + 0.05, bar(10) + 1.0));
+      bx = lerp(lerp(785, 52, dock), 760, back); by = lerp(lerp(470, 52, dock), 420, back); bs = lerp(lerp(1, 0.24, dock), 1.08, back);
+      tf(brand, bx, by, bs);
+      brand.style.transformOrigin = '0 0';
+      /* capsule rolls in from the left, then the box grows behind it */
+      const roll = spring(t - 11.1, 0.9, 0.82);
+      const cap = $('capsule');
+      cap.style.transform = `translateX(${(1 - roll) * -900}px) rotate(${(1 - roll) * -540 - 35}deg) scale(${1 + (1 - p(t, 12.2, 12.9)) * 0.35})`;
+      const box = spring(t - 12.15, 1.6, 0.8);
+      $('logoBox').style.transform = `scale(${box})`;
+      $('logoBox').style.opacity = clamp(box * 2);
+      const wm = spring(t - 12.55, 1.4, 0.82);
+      $('wordmark').style.transform = `translateX(${(1 - wm) * -260}px)`;
+      $('wordmark').style.opacity = clamp(wm * 1.3);
+    }
+    const on3 = t > 13.3 && t < 16.2; show($('s3'), on3);
+    if (on3) rise(tag, t, bar(-6) , 15.45);
+
+    /* ---- Captions S4-S6 ---- */
+    CAPS.forEach((c) => {
+      const on = t > c.t0 - 0.05 && t < c.t1 + 0.9; show(c.el, on);
+      if (!on) return;
+      rise(c.wk, t, c.t0, c.t1, 0.02);
+      rise(c.wh, t, c.t0 + 0.08, c.t1, 0.05);
+      rise(c.ws, t, c.t0 + 0.45, c.t1, 0.012);
+    });
+
+    /* ---- S4 pharmacist ---- */
+    const on4 = t > 15.6 && t < 27.0; show($('s4'), on4);
+    if (on4) {
+      const card = $('pcard');
+      const inK = spring(t - 15.75, 1.3, 0.82);
+      tf(card, (1 - inK) * 700, 0, 1);
+      card.style.opacity = clamp(inK * 2);
+      const taps = [16.6, 17.45, 18.3];
+      MEDS.forEach((m, i) => {
+        const press = Math.exp(-Math.pow((t - taps[i]) / 0.07, 2));
+        $('chip' + i).style.transform = `scale(${1 - press * 0.07})`;
+        $('chip' + i).style.background = t > taps[i] ? '#E6E9F7' : '';
+        $('chip' + i).style.color = t > taps[i] ? '#2B3A8C' : '';
+        const k = spring(t - taps[i] - 0.05, 1.6, 0.8);
+        const row = $('row' + i);
+        row.style.transform = `translateY(${(1 - k) * -40}px) scale(${0.96 + 0.04 * k})`;
+        row.style.opacity = clamp(k * 1.6);
+      });
+      /* voice */
+      const vOn = p(t, bar(-3) - 0.2, bar(-3) + 0.2);
+      $('voiceRow').style.opacity = 0.35 + 0.65 * vOn;
+      const recStart = bar(-3) + 0.45, recEnd = bar(-2) - 0.5;
+      const rec = t > recStart && t < recEnd;
+      $('recBtn').style.background = rec ? 'var(--danger)' : '#fff';
+      $('recBtn').style.color = rec ? '#fff' : 'var(--danger)';
+      $('recLabel').textContent = t < recStart ? 'Record' : rec ? 'Recording' : 'Recorded';
+      $('recDot').style.opacity = rec ? 0.4 + 0.6 * Math.abs(Math.cos((t - recStart) * Math.PI * 1.6)) : 1;
+      const secs = clamp((t - recStart) / (recEnd - recStart)) * 12;
+      $('recTime').textContent = `0:${String(Math.floor(secs)).padStart(2, '0')}`;
+      let bars = '';
+      for (let i = 0; i < 42; i++) {
+        const x = i * 10;
+        const active = (t - recStart) * 18 > i;
+        const h = active ? 8 + 44 * Math.abs(Math.sin(i * 1.7 + 0.6) * Math.cos(i * 0.43 + (rec ? t * 6 : 0))) : 6;
+        bars += `<rect x="${x}" y="${30 - h / 2}" width="5" height="${h}" rx="2.5" fill="${active ? '#A12622' : '#E3D8C6'}"/>`;
+      }
+      $('wave').innerHTML = bars;
+      /* create → QR panel */
+      const cPress = Math.exp(-Math.pow((t - (bar(-2) - 0.1)) / 0.07, 2));
+      $('createBtn').style.transform = `scale(${1 - cPress * 0.04})`;
+      const sw = eio(p(t, bar(-2) + 0.05, bar(-2) + 0.55));
+      $('pform').style.transform = `translateX(${-sw * 920}px)`;
+      $('pqr').style.transform = `translateX(${(1 - sw) * 920}px)`;
+      const qrIn = eo(p(t, bar(-2) + 0.35, bar(-2) + 1.0));
+      $('qrHole').style.clipPath = `circle(${(qrIn * 75).toFixed(2)}% at 50% 50%)`;
+      ['hchip0', 'hchip1', 'hchip2', 'hchip3'].forEach((id, i) => {
+        const k = spring(t - bar(-2) - 0.9 - i * 0.12, 1.8, 0.8);
+        $(id).style.transform = `translateY(${(1 - k) * 30}px)`; $(id).style.opacity = clamp(k * 1.5);
+      });
+      /* card leaves as the QR flies to the phone */
+      const leave = eio(p(t, bar(-1) + 0.1, bar(-1) + 0.8));
+      card.style.opacity = clamp(inK * 2) * (1 - leave);
+      $('qrHole').style.visibility = t > bar(-1) + 0.1 ? 'hidden' : 'inherit';
+    }
+
+    /* ---- S5/S6 morph and phone ---- */
+    const onM = t > bar(-1) + 0.1 && t < bar(6) + 0.9; show($('morph'), onM);
+    if (onM) {
+      const k = eio(p(t, bar(-1) + 0.1, DROP - 0.25));
+      const g = {}; ['x', 'y', 'w', 'h', 'r', 'b'].forEach((key) => { g[key] = lerp(QR_FROM[key], PHONE[key], k); });
+      /* exit into the paper sheet */
+      const ex = eio(p(t, bar(6) + 0.05, bar(6) + 0.75));
+      const m = $('morph');
+      m.style.left = g.x + 'px'; m.style.top = g.y + 'px'; m.style.width = g.w + 'px'; m.style.height = g.h + 'px';
+      m.style.borderRadius = g.r + 'px'; m.style.border = `${g.b}px solid #1B1F3B`;
+      m.style.boxShadow = `0 30px 80px rgba(27,31,59,${0.25 * k})`;
+      m.style.transform = `translateY(${ex * 120}px) scale(${1 - ex * 0.15})`;
+      m.style.opacity = 1 - ex;
+      const qr = $('morphQR');
+      qr.style.width = (g.w - 2 * g.b) + 'px'; qr.style.height = (g.w - 2 * g.b) + 'px';
+      qr.style.top = ((g.h - g.w) / 2) + 'px';
+      qr.style.opacity = 1 - p(t, DROP - 1.0, DROP - 0.45);
+      const sc = $('screen');
+      sc.style.opacity = p(t, DROP - 0.7, DROP - 0.2);
+      /* the scroller: hello lands on the drop, then scroll to the next focus */
+      const hello = spring(t - DROP + 0.05, 1.6, 0.78);
+      $('hello').style.transform = `translateY(${(1 - hello) * 40}px)`;
+      $('dayBar').style.width = (eo(p(t, DROP + 0.2, DROP + 1.0)) * 66.7) + '%';
+      const scroll = lerp(0, 420, eio(p(t, bar(5) - 0.45, bar(5) + 0.15)));
+      $('scroller').style.transform = `translateY(${-scroll}px)`;
+      /* 4 pills pop one by one, half a beat apart */
+      alPills.forEach((pl, i) => {
+        const kk = spring(t - (DROP + 0.75 + i * BAR / 8), 2.2, 0.72);
+        pl.style.transform = `scale(${kk})`; pl.style.opacity = clamp(kk * 2);
+      });
+      /* meal sequence highlight: ferMeal */
+      /* I took it */
+      const tk = t > bar(2) + 0.6;
+      const tkEl = $('takeAL');
+      tkEl.style.background = tk ? 'var(--success)' : '#fff'; tkEl.style.color = tk ? '#fff' : 'var(--success)';
+      $('takeALt').textContent = tk ? 'Taken' : 'I took it';
+      const tkPress = Math.exp(-Math.pow((t - (bar(2) + 0.6)) / 0.07, 2));
+      tkEl.style.transform = `scale(${1 - 0.05 * tkPress + 0.04 * Math.exp(-Math.pow((t - (bar(2) + 0.75)) / 0.12, 2))})`;
+      $('doseAL').style.background = tk ? 'var(--success-soft)' : '#fff';
+      $('doseAL').style.borderColor = tk ? 'var(--success)' : 'var(--line)';
+      /* listen: sound rings */
+      const lis = $('listenBtn');
+      const lOn = t > bar(3) + 0.4 && t < bar(4) - 0.2;
+      lis.style.background = lOn ? 'var(--primary)' : 'var(--primary-soft)'; lis.style.color = lOn ? '#fff' : 'var(--primary)';
+      const ring = lOn ? ((t - bar(3) - 0.4) % 0.6) / 0.6 : 0;
+      lis.style.boxShadow = lOn ? `0 0 0 ${ring * 18}px rgba(43,58,140,${0.35 * (1 - ring)})` : 'none';
+      const vb = $('voiceBtn');
+      const vOn = t > bar(3) + 1.3 && t < bar(4) - 0.2;
+      vb.style.boxShadow = vOn ? `0 0 0 ${(((t - bar(3) - 1.3) % 0.6) / 0.6) * 14}px rgba(242,179,61,${0.6 * (1 - ((t - bar(3) - 1.3) % 0.6) / 0.6)})` : 'none';
+      /* medicine sheet */
+      const shIn = spring(t - bar(4) - 0.25, 1.4, 0.85), shOut = eio(p(t, bar(5) - 0.5, bar(5) - 0.1));
+      sheetIn.style.transform = `translateY(${(1 - shIn) * 800 + shOut * 800}px)`;
+      $('sheet').style.background = `rgba(27,31,59,${0.35 * clamp(shIn) * (1 - shOut)})`;
+      $('sheet').style.visibility = t > bar(4) && t < bar(5) ? 'inherit' : 'hidden';
+      /* PRN counter */
+      const taps = [bar(5) + 0.45, bar(5) + 0.95, bar(5) + 1.45];
+      const n = taps.filter((x) => t > x).length;
+      prnDots.forEach((d, i) => { const on = i < n; d.style.background = on ? '#1B1F3B' : 'transparent'; d.style.borderColor = on ? '#1B1F3B' : '#4A4F68';
+        d.style.transform = `scale(${1 + 0.4 * Math.exp(-Math.pow((t - taps[i] - 0.05) / 0.08, 2))})`; });
+      $('prnCount').textContent = `${n} of 3 today`;
+      $('prnLimit').style.display = n >= 3 ? 'block' : 'none';
+      const pb = $('prnBtn');
+      pb.style.opacity = n >= 3 ? 0.45 : 1;
+      pb.style.transform = `scale(${1 - 0.05 * taps.reduce((a, x) => a + Math.exp(-Math.pow((t - x) / 0.06, 2)), 0)})`;
+      /* focus ring on the element each caption talks about */
+      const focus = [
+        [DROP + 0.6, bar(1) - 0.3, 'alPills'], [bar(1) + 0.15, bar(2) - 0.3, 'ferMeal'], [bar(2) + 0.1, bar(3) - 0.3, 'takeAL'],
+        [bar(3) + 0.1, bar(4) - 0.3, 'listenBtn']
+      ];
+      const hl = $('hl');
+      let shown = false;
+      focus.forEach(([a, b, id]) => {
+        if (t > a && t < b) {
+          const el = $(id), sr = $('screen').getBoundingClientRect(), r = el.getBoundingClientRect();
+          const scale = sr.width / 432 || 1;
+          const k2 = spring(t - a, 1.8, 0.8) * (1 - p(t, b - 0.25, b));
+          hl.style.left = ((r.left - sr.left) / scale - 8) + 'px'; hl.style.top = ((r.top - sr.top) / scale - 8) + 'px';
+          hl.style.width = (r.width / scale + 16) + 'px'; hl.style.height = (r.height / scale + 16) + 'px';
+          hl.style.opacity = k2; hl.style.transform = `scale(${1.08 - 0.08 * k2})`; shown = true;
+        }
+      });
+      if (!shown) hl.style.opacity = 0;
+    }
+
+    /* ---- S7 paper ---- */
+    const on7 = t > bar(6) && t < bar(8) + 0.6; show($('s7'), on7);
+    if (on7) {
+      rise(s7a, t, bar(6) + 0.3, bar(8) - 0.35);
+      const pk = spring(t - bar(6) - 0.25, 1.2, 0.84), out = ein(p(t, bar(8) - 0.3, bar(8) + 0.3));
+      const ps = $('sheetPaper');
+      tf(ps, 0, (1 - pk) * 160 - out * 160, 0.92 + 0.08 * pk);
+      ps.style.opacity = clamp(pk * 1.6) * (1 - out);
+      ticks.forEach((tk, i) => {
+        const k = eo(p(t, bar(6) + 1.0 + i * (BAR / 8), bar(6) + 1.25 + i * (BAR / 8)));
+        tk.setAttribute('stroke-dashoffset', (44 * (1 - k)).toFixed(2));
+      });
+    }
+
+    /* ---- S8 languages ---- */
+    const on8 = t > bar(8) && t < bar(10) + 0.5; show($('s8'), on8);
+    if (on8) {
+      const t0 = bar(8) + 0.25, step = BAR * 0.375;
+      rise(s8k, t, t0 - 0.1, bar(10) - 0.35, 0.03);
+      const ik = spring(t - t0, 1.6, 0.8), iout = ein(p(t, bar(10) - 0.35, bar(10) + 0.05));
+      $('s8icon').style.transform = `translateY(${(1 - ik) * 40 - iout * 80}px) scale(${0.8 + 0.2 * ik})`;
+      $('s8icon').style.opacity = clamp(ik * 1.5) * (1 - iout);
+      LANGS.forEach((_, i) => {
+        const a = t0 + i * step, b = a + step;
+        const kin = spring(t - a, 2.0, 0.82);
+        const kout = i === LANGS.length - 1 ? ein(p(t, bar(10) - 0.35, bar(10) + 0.05)) : eio(p(t, b - 0.08, b + 0.22));
+        const y = (1 - kin) * 190 - kout * 190;
+        w8[i].style.transform = `translateY(${y}px)`; n8[i].style.transform = `translateY(${(1 - kin) * 50 - kout * 50}px)`;
+        w8[i].style.visibility = n8[i].style.visibility = t > a - 0.05 && kout < 1 ? 'inherit' : 'hidden';
+      });
+      rise(s8line, t, t0 + 5 * step + 0.05, bar(10) - 0.35, 0.05);
+    }
+
+    /* ---- S9 end card ---- */
+    const on9 = t > bar(10) + 0.4; show($('s9'), on9);
+    if (on9) {
+      rise(endTag, t, bar(10) + 1.0, null, 0.06);
+      rise(endUrl, t, bar(10) + 1.6, null, 0.02);
+      rise(endFoot, t, bar(10) + 2.0, null, 0.02);
+      /* keep the last seconds alive: slow drift */
+      const drift = p(t, bar(10) + 1, T_END) * 10;
+      $('s9').style.transform = `translateY(${-drift}px)`;
+    }
+
+    /* ---- Example label ---- */
+    const ex = $('exampleTag');
+    ex.style.opacity = clamp(p(t, 15.9, 16.4) - p(t, bar(8) - 0.3, bar(8)));
+
+    /* ---- Cursor ---- */
+    const cOn = (t > 15.9 && t < bar(-1) + 0.6) || (t > DROP + 0.4 && t < bar(6) - 0.1);
+    const cur = $('cursor'), ring = $('ring');
+    cur.style.visibility = cOn ? 'visible' : 'hidden';
+    if (cOn) {
+      const c = cursorAt(t);
+      const press = CLICKS.reduce((a, x) => a + Math.exp(-Math.pow((t - x) / 0.06, 2)), 0);
+      cur.style.transform = `translate(${c.x - 8}px,${c.y - 4}px) scale(${1 - 0.15 * press})`;
+      const last = CLICKS.filter((x) => x <= t).pop();
+      const rk = last !== undefined ? p(t, last, last + 0.45) : 1;
+      ring.style.opacity = rk < 1 ? (1 - rk) * 0.8 : 0;
+      ring.style.transform = `translate(${c.x - 35}px,${c.y - 35}px) scale(${0.3 + rk})`;
+    } else ring.style.opacity = 0;
+
+    await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+  };
+
+  /* Patient taps: point the cursor at the real elements (stage coordinates) */
+  function centreOf(id) {
+    const st = $('stage').getBoundingClientRect(), r = $(id).getBoundingClientRect();
+    return [r.left - st.left + r.width / 2, r.top - st.top + r.height / 2];
+  }
+  async function placePatientTaps() {
+    await window.seek(16.0);
+    [1, 2, 3].forEach((k, i) => { const c = centreOf('chip' + i); CUR[k][1] = c[0] + 20; CUR[k][2] = c[1] + 8; });
+    await window.seek(bar(-3) + 0.3); const rb = centreOf('recBtn'); CUR[5][1] = rb[0] + 30; CUR[5][2] = rb[1] + 8;
+    await window.seek(bar(-2) - 0.2); const cb = centreOf('createBtn'); CUR[6][1] = cb[0] + 120; CUR[6][2] = cb[1] + 8;
+    await window.seek(bar(2) + 0.5); const a = centreOf('takeAL');
+    await window.seek(bar(3) + 0.3); const b = centreOf('listenBtn');
+    await window.seek(bar(4) + 0.1); const c = centreOf('mCard');
+    await window.seek(bar(5) + 0.4); const d = centreOf('prnBtn');
+    CUR[10][1] = a[0] + 40; CUR[10][2] = a[1] + 6;
+    CUR[11][1] = b[0] + 6; CUR[11][2] = b[1] + 6;
+    CUR[12][1] = c[0] + 60; CUR[12][2] = c[1];
+    CUR[14][1] = d[0] + 40; CUR[14][2] = d[1] + 6;
+    CUR[9][1] = a[0] + 160; CUR[9][2] = a[1] + 120;
+  }
+
+  /* ---------- Preview controls (not used by the renderer) ---------- */
+  let playing = false, t0 = 0, tStart = 0, cur = 0;
+  const hud = document.createElement('div');
+  hud.style.cssText = 'position:fixed;left:8px;bottom:8px;font:14px monospace;color:#fff;background:#000a;padding:4px 8px;z-index:99';
+  document.addEventListener('keydown', (e) => {
+    if (e.code === 'Space') { playing = !playing; t0 = performance.now(); tStart = cur; loop(); }
+    if (e.key === 'ArrowRight') { cur = Math.min(T_END, cur + 1 / 30); window.seek(cur); }
+    if (e.key === 'ArrowLeft') { cur = Math.max(0, cur - 1 / 30); window.seek(cur); }
+    if (e.key === 'r') { cur = 0; window.seek(0); }
+    hud.textContent = cur.toFixed(2) + ' s';
+  });
+  function loop() { if (!playing) return; cur = tStart + (performance.now() - t0) / 1000; if (cur > T_END) cur = 0, tStart = 0, t0 = performance.now(); window.seek(cur); hud.textContent = cur.toFixed(2) + ' s'; requestAnimationFrame(loop); }
+
+  window.T_END = T_END;
+  (async () => {
+    await document.fonts.ready;
+    await window.seek(0.001);
+    await placePatientTaps();
+    await window.seek(0);
+    if (!navigator.webdriver) document.body.appendChild(hud);
+    window.ready = true;
+  })();
+})();
+</script>
+</body>
+</html>
