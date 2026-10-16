@@ -1,6 +1,6 @@
 # Devpost submission: ready to paste
 
-> Copy each section into the matching Devpost field. Lines in `[brackets]` are for you to complete.
+> Copy each section into the matching Devpost field. The one line in `[brackets]` is optional: replace it with a personal sentence, or delete it.
 
 ---
 
@@ -41,7 +41,7 @@ Dose also handles **missed doses** safely, **locks “only if needed” medicine
 **Private by design:** no account and no server. The prescription lives inside the link.
 
 ## How we built it
-We started from the moment that fails, the pharmacy counter, and wrote a design brief with proto-personas, flows and design principles. Then we built the visual foundations: Atkinson Hyperlegible, a warm high-contrast palette, drawn pills and time-of-day pictograms. After that came the patient view, the pharmacist view with its live preview, the printable sheet and the landing page.
+We started from the moment that fails, the pharmacy counter. We grounded the design in published research on pictograms and medication instructions (Dowse & Ehlers 2005: understanding rose from 70 % to 95 % with pictograms; Katz et al. 2006: clock icons confuse patients). Then we wrote a design brief with proto-personas, flows and design principles. Then we built the visual foundations: Atkinson Hyperlegible, a warm high-contrast palette, drawn pills and time-of-day pictograms. After that came the patient view, the pharmacist view with its live preview, the printable sheet and the landing page.
 
 It is plain **HTML, CSS and JavaScript**, with no framework and no build step:
 - **Web Speech API** for reading aloud in 5 languages;
@@ -69,7 +69,7 @@ It is hosted on **GitHub Pages**. Every screen was checked in a headless browser
 - Designing for low literacy means designing **for everyone**: the drawn quantities and picture sequences are faster for fluent readers too.
 - **Paper is not a fallback.** For many patients, it is the main channel.
 - Privacy can be a design choice: putting the data in the link removed the need for accounts entirely.
-[Add one learning from your interviews.]
+- Research done before us saved us from a mistake: clock icons confuse patients (Katz et al., 2006), so we used the sun and the moon instead.
 
 ## What's next for Dose
 1. Testing in real pharmacies in Cotonou with the 5-second test (“What do you have to do, and when?”).

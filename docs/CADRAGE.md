@@ -156,7 +156,11 @@ L'aidant reçoit le même lien et voit les prises cochées. L'écran est présen
 3. **Vidéo de démo de 2 minutes** : le problème (20 s), la démo (90 s), l'impact (10 s).
 4. **Texte de soumission** en anglais.
 
-## 9. Recherche utilisateur à mener (avant le rendu)
+## 9. Recherche utilisateur
+
+**Choix pour le hackathon : pas d'entretien.** Le design s'appuie sur la recherche publiée (Dowse & Ehlers 2005, Katz et al. 2006, OMS 2003, données UNESCO). Le détail figure dans [CASE_STUDY.md](CASE_STUDY.md), section 3. Le guide ci-dessous reste prêt pour une validation après le hackathon.
+
+### Guide d'entretien (pour plus tard)
 
 Objectif : **2 ou 3 entretiens de 15 minutes**, pour obtenir des citations réelles qui remplaceront les hypothèses des personas.
 

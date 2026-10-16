@@ -17,12 +17,12 @@ A prescription is written **for the pharmacist, not for the patient**: handwriti
 
 Many patients in Benin and across West Africa:
 
-- do not read French fluently, or do not read at all;
+- do not read French fluently, or do not read at all. Only about **half of adults in Benin can read** (adult literacy around 47 to 51 % in 2022, UNESCO data), with a gender gap of more than 20 points;
 - speak a local language first (Fon, Yoruba, Mina, Dendi, Baatonum…);
 - get a quick spoken explanation at the counter, then forget it on the way home;
 - own a basic phone or a shared Android phone, often with a patchy connection.
 
-The consequences are wrong doses, missed doses, and treatments stopped too early. That last one is especially dangerous for antimalarials and antibiotics. According to the WHO, about half of patients with chronic diseases do not take their treatment as prescribed (*Adherence to Long-Term Therapies*, 2003). Not understanding the instructions is one of the direct causes.
+The consequences are wrong doses, missed doses, and treatments stopped too early. That last one is especially dangerous for antimalarials and antibiotics. The WHO estimates that adherence to long-term treatments averages only about 50 %, and is lower in developing countries (*Adherence to Long-Term Therapies*, 2003). Not understanding the instructions is one of the direct causes.
 
 ### Where Dose fits
 
@@ -40,7 +40,7 @@ Dose does not replace the doctor or the prescription. It sits **at the pharmacy 
 
 ### Proto-personas (hypotheses to validate)
 
-> These personas are **assumptions** built from the context, not research findings yet. They are marked as such on purpose. See section 3.
+> These personas are **assumptions** built from the context and from the published research in section 3. We did not run interviews during the hackathon, and we say so on purpose.
 
 - **Mama Afi, 58, market trader in Cotonou.** Speaks Fon and reads very little French. Shares an Android phone with her daughter. She has malaria: an antimalarial taken as 4 tablets morning and evening, plus iron and paracetamol.
 - **Rodrigue, 34, pharmacy assistant near Cotonou.** Serves dozens of customers a day and already writes doses on the boxes with a pen. He has no time to explain everything twice.
@@ -50,23 +50,30 @@ Dose does not replace the doctor or the prescription. It sits **at the pharmacy 
 
 ## 3. Research
 
-**Method (planned):** three short interviews (15 min): one pharmacist, one patient, one caregiver. Plus a **5-second test**: show a single dose card with no explanation, then ask *“What do you have to do, and when?”*
+We had no time to run field interviews during the hackathon, so we based the design on **published research**, then turned it into assumptions that the prototype makes testable.
 
-**Interview guide.**
-- *Pharmacist:* How do you explain a treatment to someone who cannot read? Which mistakes do you see most often? How much time do you have per patient? Do you already write anything on the boxes?
-- *Patient / caregiver:* Last time you had several medicines, how did you know when to take them? Have you ever forgotten or mixed them up? Who helps you read medical papers? What phone do you use? Do you use WhatsApp?
+### What the research says
 
-**Findings.**
-<!-- TO FILL IN after the interviews: 3 to 5 real quotes, and what changed in the design because of them. -->
-- *“…”*: pharmacist, [neighbourhood]
-- *“…”*: patient or caregiver
-- **What we changed:** …
+| Source | Finding | What it changed in Dose |
+|---|---|---|
+| **Dowse & Ehlers (2005)**, *Medicine labels incorporating pictograms: do they influence understanding and adherence?*, Patient Education and Counseling 58(1). Randomised study with 87 patients with low formal schooling on a short antibiotic course, South Africa. | With pictograms added to the label, average **understanding rose from 70 % to 95 %** and average **adherence from 72 % to 90 %**. 54 % of the pictogram group reached over 90 % adherence, against 2 % of the text-only group. | Pictures are the **main channel**, not decoration: drawn pills, moments of the day, meal sequences. |
+| **Katz, Kripalani & Weiss (2006)**, *Use of pictorial aids in medication instructions: a review of the literature*, American Journal of Health-System Pharmacy 63. | Pictorial aids improve recall, comprehension and adherence, especially for **dose timing** and **finishing a course**. Combining **text, speech and pictures** works best. **Clock icons were too complex** to help. | **No clock**: sun and moon instead. Text, pictures *and* voice on every dose. “Day 2 of 3” and “Last day” to finish the course. |
+| **WHO (2003)**, *Adherence to Long-Term Therapies: Evidence for Action*. | Adherence to long-term treatments averages about 50 %, lower in developing countries. | The missed-dose guidance, the daily maximum for “only if needed” medicines, and the end-of-treatment message. |
+| **UNESCO data via the World Bank (2022)**: adult literacy in Benin. | Around half of adults can read, with a gap of more than 20 points between men and women. | Zero reading required, a voice message in the patient's language, and a paper version. |
 
-**Key assumptions the prototype tests**
+> Note on these sources: the Dowse & Ehlers sample is small and comes from a single clinic, and the WHO's 50 % figure is a widely quoted estimate built on old studies. We use them as **direction**, not as proof that Dose works.
+
+### Assumptions the prototype makes testable
 1. A count of drawn pills is understood faster than a number.
 2. The *order* of pictures (pill → plate, or plate → pill) communicates “before / after eating” without text.
-3. A pharmacist will spend about one minute on this if most fields are pre-filled.
-4. A voice message from a known person is trusted more than a synthetic voice.
+3. Sun and moon pictograms are understood faster than clock times.
+4. A pharmacist will spend about one minute on this if most fields are pre-filled.
+5. A voice message from a known person is trusted more than a synthetic voice.
+
+### How we would validate them
+- A **5-second test** in a pharmacy: show one dose card with no explanation, then ask *“What do you have to do, and when?”*
+- Short interviews with a pharmacist, a patient and a caregiver. The guide is ready in [CADRAGE.md](CADRAGE.md), in French.
+- Timing pharmacists filling in a real prescription.
 
 ---
 
@@ -178,7 +185,7 @@ QR code, link, **WhatsApp** (widely used in Benin), SMS, or a **printed sheet**.
 
 ## 11. What's next
 
-1. Run the interviews and the 5-second test in a pharmacy, then iterate.
+1. Validate the assumptions in section 3 in a real pharmacy (5-second test, interviews, timing), then iterate.
 2. Reminders by SMS (works on basic phones) and an installable PWA.
 3. A synchronised caregiver view.
 4. Secure, short-lived storage for voice messages.
@@ -189,5 +196,14 @@ QR code, link, **WhatsApp** (widely used in Benin), SMS, or a **printed sheet**.
 ## 12. How it is built
 
 Plain **HTML, CSS and JavaScript**, with no framework and no build step. It uses the Web Speech API (text-to-speech), MediaRecorder (voice messages), `<dialog>` (medicine sheet) and print CSS (paper sheet). The prescription is encoded in the URL as JSON → UTF-8 → base64url. The QR code uses *qrcode-generator*. Hosted on GitHub Pages. Every page was checked in a headless browser at phone and desktop sizes, with an automated check that all 5 translations are complete.
+
+---
+
+## Sources
+
+- Dowse R., Ehlers M. (2005). *Medicine labels incorporating pictograms: do they influence understanding and adherence?* Patient Education and Counseling, 58(1), 63–70. [Rhodes University repository](https://vital.seals.ac.za/vital/access/manager/Repository/vital:6359)
+- Katz M. G., Kripalani S., Weiss B. D. (2006). *Use of pictorial aids in medication instructions: a review of the literature.* American Journal of Health-System Pharmacy, 63, 2391–2397. [University of Arizona](https://experts.arizona.edu/en/publications/use-of-pictorial-aids-in-medication-instructions-a-review-of-the-/)
+- World Health Organization (2003). *Adherence to Long-Term Therapies: Evidence for Action.* [WHO news release](https://www.who.int/news/item/01-07-2003-failure-to-take-prescribed-medicine-for-chronic-diseases-is-a-massive-world-wide-problem)
+- Adult literacy rate, Benin (UNESCO Institute for Statistics data). [World Bank gender data profile](https://genderdata.worldbank.org/data/download/pdfs/countries/benin.pdf) · [UN LDC profile](https://policy.desa.un.org/sites/default/files/2025-06/ldc_profile_benin.pdf)
 
 *Prototype. Dose does not replace advice from a doctor or pharmacist.*
